@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // L'hébergeur place l'API derrière son proxy HTTPS : sans cela, Laravel
+        // verrait l'adresse du proxy (limitation de débit) et des URL en http.
+        $middleware->trustProxies(at: env('TRUSTED_PROXIES', '*'));
+
         $middleware->throttleApi();
 
         $middleware->api(append: [
