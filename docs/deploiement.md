@@ -112,3 +112,20 @@ Les adresses du site historique sont redirigées de façon permanente (`frontend
 | `/index.html`, `/page4.html` | `/` |
 | `/page12.html` | `/formations` |
 | `/page8.html` | `/admissions` |
+
+## Railway
+
+Le projet Railway « EPHT » (environnement `production`) compte quatre services, tous déployés depuis la branche `main` de `phonedelta/EPHT` :
+
+| Service | Dossier racine | Build | Démarrage |
+| --- | --- | --- | --- |
+| `api` | `/backend` | `backend/Dockerfile` (FrankenPHP, PHP 8.4) | `backend/docker/start.sh` : `storage:link`, migrations, seeders, `optimize`, serveur sur `$PORT` |
+| `worker` | `/backend` | même Dockerfile | `php artisan queue:work --tries=3 --max-time=3600` |
+| `web` | `/frontend` | Railpack (Node) | `npm run start` (écoute sur `$PORT`) |
+| `Postgres` | — | modèle Railway | — |
+
+- Les médias publics sont sur un volume monté sur `api` à `/app/storage/app/public`. Les migrations et les seeders tournent au démarrage du conteneur, et non en « pre-deploy », car le volume n'est pas monté pendant cette étape.
+- `api` et `worker` lisent la base via `DB_URL=${{Postgres.DATABASE_URL}}`. `worker` reprend `APP_KEY` et `FRONTEND_REVALIDATE_SECRET` de `api` par référence, et `web` reprend `REVALIDATE_SECRET` de la même façon.
+- Chaque service ne se reconstruit que si son dossier change (`/backend/**` ou `/frontend/**`).
+- Le build de `web` pré-rend les pages avec les données de l'API : déployer `api` d'abord. Si l'API n'est pas encore prête, les pages se régénèrent seules ensuite.
+- Les domaines `*.up.railway.app` ne partagent pas de domaine parent : avant la mise en service de l'administration, rattacher des domaines personnalisés (`www.epht.ma`, `api.epht.ma`) et renseigner `SESSION_DOMAIN`.
