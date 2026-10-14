@@ -119,7 +119,7 @@ export function Lightbox({ items, index, onChange, onClose }: LightboxProps) {
           }}
         >
           <div className="flex h-16 shrink-0 items-center justify-between px-5 md:px-8">
-            <p aria-live="polite" className="text-[0.8125rem] font-semibold tracking-[0.14em] text-white/70">
+            <p aria-live="polite" className="font-display text-[0.8125rem] font-medium tracking-[0.08em] text-white/70">
               {t.lightbox.counter(index + 1, total)}
             </p>
             <button
@@ -127,7 +127,7 @@ export function Lightbox({ items, index, onChange, onClose }: LightboxProps) {
               type="button"
               onClick={onClose}
               aria-label={t.lightbox.close}
-              className="grid size-11 place-items-center rounded-full border border-white/25 transition-colors duration-300 hover:border-white hover:bg-white hover:text-ink"
+              className="grid size-11 place-items-center rounded-full border border-white/25 transition-colors duration-200 hover:border-white hover:bg-white hover:text-ink"
             >
               <X aria-hidden="true" strokeWidth={1.5} className="size-5" />
             </button>
@@ -188,7 +188,7 @@ export function Lightbox({ items, index, onChange, onClose }: LightboxProps) {
                   type="button"
                   onClick={() => go(-1)}
                   aria-label={t.lightbox.previous}
-                  className="absolute left-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-ink/60 transition-colors duration-300 hover:border-white hover:bg-white hover:text-ink md:left-6 md:size-12"
+                  className="absolute left-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-ink/60 transition-colors duration-200 hover:border-white hover:bg-white hover:text-ink md:left-6 md:size-12"
                 >
                   <ChevronLeft aria-hidden="true" strokeWidth={1.5} className="size-5" />
                 </button>
@@ -196,7 +196,7 @@ export function Lightbox({ items, index, onChange, onClose }: LightboxProps) {
                   type="button"
                   onClick={() => go(1)}
                   aria-label={t.lightbox.next}
-                  className="absolute right-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-ink/60 transition-colors duration-300 hover:border-white hover:bg-white hover:text-ink md:right-6 md:size-12"
+                  className="absolute right-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/25 bg-ink/60 transition-colors duration-200 hover:border-white hover:bg-white hover:text-ink md:right-6 md:size-12"
                 >
                   <ChevronRight aria-hidden="true" strokeWidth={1.5} className="size-5" />
                 </button>
@@ -206,16 +206,8 @@ export function Lightbox({ items, index, onChange, onClose }: LightboxProps) {
 
           <div className="shrink-0 px-5 py-5 text-center md:px-8">
             {item.category ? <p className="eyebrow text-cyan-300">{item.category}</p> : null}
-            {item.title ? <p className="mt-2 font-display text-lg text-white">{item.title}</p> : null}
-            <p className="mt-1.5 text-[0.8125rem] text-white/60">
-              {[
-                item.media.caption,
-                item.media.is_illustrative ? t.common.illustrativePhoto : null,
-                item.media.credit ? `${t.common.photoCredit} : ${item.media.credit}` : null,
-              ]
-                .filter(Boolean)
-                .join(" · ")}
-            </p>
+            {item.title ? <p className="mt-2 font-display text-base font-medium text-white">{item.title}</p> : null}
+            {item.media.caption ? <p className="mt-1.5 text-[0.8125rem] text-white/60">{item.media.caption}</p> : null}
           </div>
         </motion.div>
       ) : null}

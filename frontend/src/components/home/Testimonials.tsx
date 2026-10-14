@@ -27,39 +27,34 @@ export function Testimonials({ content, testimonials }: TestimonialsProps) {
   const single = testimonials.length === 1;
 
   return (
-    <section aria-labelledby="testimonials-title" className="section-y bg-background">
+    <section aria-labelledby="testimonials-title" className="section-y bg-cyan-100">
       <div className="container-page">
         <SectionHeader id="testimonials-title" eyebrow={t.eyebrow} title={content.title} />
 
-        <RevealGroup
-          as="ul"
-          stagger={0.12}
-          className={cn("mt-12 grid gap-x-8 gap-y-12 lg:mt-16", !single && "lg:grid-cols-2")}
-        >
+        <RevealGroup as="ul" stagger={0.08} className={cn("mt-10 grid gap-5 lg:mt-12 lg:gap-6", !single && "lg:grid-cols-2")}>
           {testimonials.map((testimonial) => (
-            <RevealItem as="li" key={testimonial.id} className="border-t border-line pt-8">
-              <figure className={cn(single && "max-w-[52rem]")}>
-                <Quote aria-hidden="true" strokeWidth={1.25} className="size-8 text-cyan-500" />
+            <RevealItem as="li" key={testimonial.id} className="rounded-xl border border-line bg-surface p-6 sm:p-8">
+              <figure className={cn("flex h-full flex-col", single && "max-w-[52rem]")}>
+                <Quote aria-hidden="true" strokeWidth={1.5} className="size-6 text-cyan-500" />
                 <blockquote
                   className={cn(
-                    "mt-5 font-display leading-[1.35] text-ink",
-                    single ? "text-2xl sm:text-[2rem]" : "text-[1.375rem] sm:text-2xl",
+                    "mb-6 mt-4 font-display font-medium leading-[1.5] tracking-[-0.01em] text-ink",
+                    single ? "text-xl sm:text-2xl" : "text-lg sm:text-xl",
                   )}
                 >
                   <p>{testimonial.quote}</p>
                 </blockquote>
-                <figcaption className="mt-7 flex items-center gap-4">
+                <figcaption className="mt-auto flex items-center gap-3.5 border-t border-line pt-5">
                   {testimonial.photo ? (
                     <Photo
                       media={testimonial.photo}
-                      sizes="56px"
-                      className="size-14 shrink-0 rounded-full"
-                      hideIllustrativeLabel
+                      sizes="44px"
+                      className="size-11 shrink-0 rounded-full"
                     />
                   ) : null}
                   <div>
-                    <p className="font-bold text-ink">{testimonial.author_name}</p>
-                    <p className="text-[0.9375rem] text-muted">
+                    <p className="font-display text-[0.9375rem] font-semibold text-ink">{testimonial.author_name}</p>
+                    <p className="text-sm text-muted">
                       {[testimonial.author_role, testimonial.formation?.title].filter(Boolean).join(" · ")}
                     </p>
                   </div>

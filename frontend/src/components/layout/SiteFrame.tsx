@@ -4,6 +4,7 @@ import { MotionProvider } from "@/components/motion/MotionProvider";
 import { dataOr, getFormations, getSiteSettings } from "@/lib/api/queries";
 import { siteSettingsSchema } from "@/lib/api/schemas";
 
+import { BackToTop } from "./BackToTop";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 
@@ -26,6 +27,7 @@ export async function SiteFrame({ children }: { children: ReactNode }) {
         {children}
       </main>
       <Footer settings={settings} formations={formations} />
+      <BackToTop />
     </MotionProvider>
   );
 }

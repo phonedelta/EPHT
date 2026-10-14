@@ -41,19 +41,6 @@ describe("FormationCard", () => {
     expect(screen.getByText("2 ans")).toBeInTheDocument();
     expect(screen.getByText("Diplôme de Technicien")).toBeInTheDocument();
   });
-
-  it("signale une photographie d'illustration, et seulement elle", () => {
-    const { unmount } = render(
-      <FormationCard formation={formation({ cover: media({ is_illustrative: true }) })} index={0} sizes="100vw" />,
-    );
-
-    expect(screen.getByText("Photo d’illustration")).toBeInTheDocument();
-    unmount();
-
-    render(<FormationCard formation={formation({ cover: media({ is_illustrative: false }) })} index={0} sizes="100vw" />);
-
-    expect(screen.queryByText("Photo d’illustration")).not.toBeInTheDocument();
-  });
 });
 
 describe("Testimonials", () => {

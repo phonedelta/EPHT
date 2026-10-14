@@ -1,11 +1,30 @@
-import { RevealGroup, RevealImage, RevealItem } from "@/components/motion/Reveal";
+import { Reveal, RevealGroup, RevealImage, RevealItem } from "@/components/motion/Reveal";
 import { Photo } from "@/components/ui/Photo";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getDictionary } from "@/i18n";
-import type { HomeSettings } from "@/lib/api/schemas";
+import type { HomeSettings, Media } from "@/lib/api/schemas";
+import { cn } from "@/lib/cn";
 import { ordinal } from "@/lib/format";
 
-/** Formation pratique : grande composition photographique sur fond sombre. */
+/*
+ * Composition photographique sur douze colonnes (grands écrans) : une grande
+ * image et deux verticales, à hauteur égale. Elle se resserre si l'une des
+ * photographies manque.
+ */
+const LAYOUTS: Record<number, Array<{ span: string; frame: string; sizes: string }>> = {
+  1: [{ span: "col-span-2 lg:col-span-12", frame: "aspect-[16/9]", sizes: "(min-width: 1320px) 1240px, 100vw" }],
+  2: [
+    { span: "col-span-2 lg:col-span-7", frame: "aspect-[16/10]", sizes: "(min-width: 1320px) 720px, (min-width: 1024px) 58vw, 100vw" },
+    { span: "col-span-2 lg:col-span-5", frame: "aspect-[16/10]", sizes: "(min-width: 1320px) 510px, (min-width: 1024px) 42vw, 100vw" },
+  ],
+  3: [
+    { span: "col-span-2 lg:col-span-6", frame: "aspect-[16/10]", sizes: "(min-width: 1320px) 610px, (min-width: 1024px) 50vw, 100vw" },
+    { span: "col-span-1 lg:col-span-3", frame: "aspect-[3/4]", sizes: "(min-width: 1320px) 300px, (min-width: 1024px) 25vw, 50vw" },
+    { span: "col-span-1 lg:col-span-3", frame: "aspect-[3/4]", sizes: "(min-width: 1320px) 300px, (min-width: 1024px) 25vw, 50vw" },
+  ],
+};
+
+/** Formation pratique : composition photographique sur fond sombre. */
 export function Practice({ content }: { content: HomeSettings["practice"] }) {
   const t = getDictionary().home.practice;
 
@@ -13,70 +32,57 @@ export function Practice({ content }: { content: HomeSettings["practice"] }) {
     return null;
   }
 
+  const photos = [content.image, content.image_secondary, content.image_tertiary].filter(
+    (photo): photo is Media => photo !== null,
+  );
+  const layout = LAYOUTS[photos.length] ?? [];
+
   return (
     <section aria-labelledby="practice-title" className="on-dark section-y bg-ink text-white">
       <div className="container-page">
-        <div className="grid items-end gap-y-10 lg:grid-cols-12 lg:gap-x-8">
-          <SectionHeader
-            id="practice-title"
-            eyebrow={t.eyebrow}
-            title={content.title}
-            intro={content.intro}
-            light
-            className="lg:col-span-6"
-          />
-          {content.image_tertiary ? (
-            <RevealImage curtain="bg-ink" delay={0.1} className="hidden lg:col-span-4 lg:col-start-9 lg:block">
-              <Photo media={content.image_tertiary} sizes="32vw" className="aspect-[16/10]" />
-            </RevealImage>
+        <div className="grid items-end gap-y-5 lg:grid-cols-12 lg:gap-x-10">
+          <SectionHeader id="practice-title" eyebrow={t.eyebrow} title={content.title} light className="lg:col-span-6" />
+          {content.intro ? (
+            <Reveal delay={0.08} className="lg:col-span-5 lg:col-start-8">
+              <p className="text-lead text-white/70">{content.intro}</p>
+            </Reveal>
           ) : null}
         </div>
 
-        {content.image || content.image_secondary ? (
-          <div className="mt-12 grid items-end gap-5 sm:grid-cols-12 lg:mt-8 lg:gap-8">
-            {content.image ? (
-              <RevealImage curtain="bg-ink" className="sm:col-span-12 lg:col-span-8">
+        {photos.length > 0 ? (
+          <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:mt-12 lg:h-[30rem] lg:grid-cols-12">
+            {photos.map((photo, index) => (
+              <RevealImage
+                parallax
+                key={photo.id}
+                curtain="bg-ink"
+                delay={index * 0.08}
+                className={cn("rounded-lg", layout[index]?.span)}
+              >
                 <Photo
-                  media={content.image}
-                  sizes="(min-width: 1024px) 64vw, 100vw"
-                  className="aspect-[4/3] sm:aspect-[16/9] lg:aspect-[3/2]"
+                  media={photo}
+                  sizes={layout[index]?.sizes ?? "100vw"}
+                  className={cn(layout[index]?.frame, "lg:aspect-auto lg:h-full")}
                 />
               </RevealImage>
-            ) : null}
-            {content.image_secondary ? (
-              <RevealImage curtain="bg-ink" delay={0.15} className="col-span-1 sm:col-span-6 lg:col-span-4">
-                <Photo
-                  media={content.image_secondary}
-                  sizes="(min-width: 1024px) 32vw, (min-width: 640px) 50vw, 100vw"
-                  className="aspect-[4/3] sm:aspect-[4/5]"
-                />
-              </RevealImage>
-            ) : null}
-            {content.image_tertiary ? (
-              <RevealImage curtain="bg-ink" delay={0.2} className="hidden sm:col-span-6 sm:block lg:hidden">
-                <Photo media={content.image_tertiary} sizes="50vw" className="aspect-[4/5]" />
-              </RevealImage>
-            ) : null}
+            ))}
           </div>
         ) : null}
 
         {content.points.length > 0 ? (
           <RevealGroup
             as="ol"
-            stagger={0.08}
-            className="mt-14 grid border-t border-white/15 sm:grid-cols-2 lg:mt-20 lg:grid-cols-5"
+            stagger={0.06}
+            className="mt-12 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:mt-14 lg:grid-cols-5"
           >
             {content.points.map((point, index) => (
-              <RevealItem
-                as="li"
-                key={point.title}
-                className="border-b border-white/15 py-7 sm:pr-8 lg:border-b-0 lg:pb-0 lg:pr-7"
-              >
-                <span aria-hidden="true" className="font-display text-lg text-cyan-300">
+              <RevealItem as="li" key={point.title} className="relative border-t border-white/15 pt-5">
+                <span aria-hidden="true" className="absolute -top-px left-0 h-px w-10 bg-cyan-400" />
+                <span aria-hidden="true" className="font-display text-[0.8125rem] font-semibold text-cyan-400">
                   {ordinal(index)}
                 </span>
-                <h3 className="mt-3 text-[1.0625rem] font-bold text-white">{point.title}</h3>
-                {point.text ? <p className="mt-2 text-[0.9375rem] leading-relaxed text-white/70">{point.text}</p> : null}
+                <h3 className="mt-2.5 font-display text-base font-semibold text-white">{point.title}</h3>
+                {point.text ? <p className="mt-1.5 text-sm leading-relaxed text-white/65">{point.text}</p> : null}
               </RevealItem>
             ))}
           </RevealGroup>

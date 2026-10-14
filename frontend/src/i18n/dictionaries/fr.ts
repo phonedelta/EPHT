@@ -7,9 +7,8 @@
 export const fr = {
   common: {
     skipToContent: "Aller au contenu",
-    illustrativePhoto: "Photo d’illustration",
-    photoCredit: "Photo",
     readMore: "Lire la suite",
+    backToTop: "Revenir en haut de la page",
     backToHome: "Retour à l’accueil",
     close: "Fermer",
     previous: "Précédent",
@@ -38,11 +37,19 @@ export const fr = {
       eyebrow: "École hôtelière · Salé",
       primaryCta: "Découvrir nos formations",
       secondaryCta: "Demander une inscription",
-      facts: {
-        formations: "Formations",
-        campus: "Campus",
-        admissions: "Admissions",
-        admissionsValue: "Candidature en ligne",
+      // Chaque repère est affiché sur deux lignes.
+      features: [
+        ["Formations", "professionnelles"],
+        ["Apprentissage", "par la pratique"],
+        ["Accompagnement", "vers l’emploi"],
+      ],
+      // Mention manuscrite, sur deux lignes.
+      tagline: ["Un métier", "passionnant"],
+      carousel: {
+        label: "Photographies de l’école",
+        previous: "Photo précédente",
+        next: "Photo suivante",
+        show: (position: number) => `Afficher la photo ${position}`,
       },
     },
     about: {
@@ -89,6 +96,115 @@ export const fr = {
     cta: {
       primary: "Demander une inscription",
       secondary: "Contacter l’école",
+    },
+  },
+
+  /*
+   * Pages intérieures. Seuls des titres de rubriques et des textes d'usage
+   * figurent ici : les présentations viennent de l'API, et aucun fait sur
+   * l'école (dates, chiffres, agréments) n'est écrit dans le code.
+   */
+  pages: {
+    breadcrumb: "Fil d’Ariane",
+    filters: {
+      label: "Filtrer",
+      all: "Tout",
+    },
+    school: {
+      projectEyebrow: "Notre projet",
+      spacesEyebrow: "Nos espaces",
+      spacesCta: "Voir les infrastructures",
+    },
+    formations: {
+      eyebrow: "Catalogue",
+      filterLabel: "Filtrer par famille de métiers",
+      count: (count: number) => (count > 1 ? `${count} formations` : `${count} formation`),
+      empty: "Aucune formation n’est publiée pour le moment.",
+      admissionsEyebrow: "Inscription",
+    },
+    formation: {
+      facts: {
+        family: "Famille de métiers",
+        level: "Niveau",
+        diploma: "Diplôme",
+        duration: "Durée",
+      },
+      overviewEyebrow: "Présentation",
+      sections: {
+        objectives: "Objectifs",
+        skills: "Compétences développées",
+        program: "Programme",
+        requirements: "Conditions d’accès",
+        careers: "Débouchés",
+        documents: "Documents à fournir",
+      },
+      faqEyebrow: "Questions fréquentes",
+      galleryEyebrow: "En images",
+      pendingTitle: "Programme détaillé",
+      pending:
+        "Le programme, les conditions d’accès et les débouchés de cette formation seront publiés prochainement. Pour toute question, contactez l’école.",
+      othersEyebrow: "Formations",
+      othersTitle: "Les autres formations",
+    },
+    admissions: {
+      stepsEyebrow: "Étapes",
+      stepsTitle: "Le parcours d’inscription",
+      chooseEyebrow: "Formations",
+      chooseTitle: "Choisir sa formation",
+      onlineEyebrow: "Candidature",
+      onlineTitle: "Une question avant de candidater ?",
+      onlineText:
+        "Le dépôt de candidature en ligne ouvrira prochainement. En attendant, l’école répond à vos questions par téléphone et par e-mail.",
+    },
+    infrastructures: {
+      eyebrow: "Espace",
+      open: "Agrandir la photo",
+    },
+    studentLife: {
+      galleryEyebrow: "En images",
+      galleryTitle: "L’année en images",
+      upcomingEyebrow: "Agenda",
+      upcomingTitle: "Événements à venir",
+      pastEyebrow: "Retour sur",
+      pastTitle: "Événements passés",
+    },
+    careers: {
+      eyebrow: "Stages & Carrières",
+      title: "Stages et offres d’emploi.",
+      lead: "Retrouvez ici les offres de stage et d’emploi publiées par l’école.",
+      offersEyebrow: "Offres",
+      offersTitle: "Les offres publiées",
+      filterLabel: "Filtrer par type d’offre",
+      empty: "Aucune offre n’est publiée pour le moment. Les nouvelles offres apparaîtront ici dès leur publication.",
+      apply: "Postuler",
+      applyByEmail: "Postuler par e-mail",
+      expires: (date: string) => `Jusqu’au ${date}`,
+      partnersEyebrow: "Partenaires",
+      partnersTitle: "Les partenaires de l’école",
+      partnerSite: "Site du partenaire",
+    },
+    news: {
+      lead: "Les dernières nouvelles de l’école, de ses formations et de ses étudiants.",
+      filterLabel: "Filtrer par catégorie",
+      more: "Voir plus d’actualités",
+      empty: "Aucune actualité n’est publiée pour le moment.",
+      relatedEyebrow: "À lire aussi",
+      relatedTitle: "Dans la même catégorie",
+    },
+    contact: {
+      eyebrow: "Contact",
+      title: "Contactez l’école.",
+      lead: "Une question sur les formations ou sur l’inscription ? L’EPHT vous répond par téléphone et par e-mail.",
+      address: "Adresse",
+      phone: "Téléphone",
+      email: "E-mail",
+      whatsapp: "WhatsApp",
+      hours: "Horaires",
+      social: "Réseaux sociaux",
+      call: "Appeler",
+      write: "Écrire",
+      map: "Voir le plan d’accès",
+      mapTitle: "Plan d’accès à l’école",
     },
   },
 

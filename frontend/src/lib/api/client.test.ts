@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 
-import { apiGet } from "./client";
+import { apiGet, apiGetWithMeta } from "./client";
 
 const schema = z.array(z.object({ id: z.number(), title: z.string() }));
 
@@ -64,5 +64,36 @@ describe("apiGet", () => {
     fetchMock.mockResolvedValue(respond("<html>Erreur</html>"));
 
     expect(await apiGet("formations", schema)).toMatchObject({ ok: false, status: 502 });
+  });
+});
+
+describe("apiGetWithMeta", () => {
+  const fetchMock = vi.fn();
+  const metaSchema = z.object({ last_page: z.number() });
+
+  beforeEach(() => {
+    vi.stubGlobal("fetch", fetchMock);
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    fetchMock.mockReset();
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("renvoie les données et la méta validées", async () => {
+    fetchMock.mockResolvedValue(respond({ success: true, data: [{ id: 1, title: "Cuisine" }], meta: { last_page: 2 } }));
+
+    expect(await apiGetWithMeta("articles", schema, metaSchema, { page: 1 })).toEqual({
+      ok: true,
+      data: { data: [{ id: 1, title: "Cuisine" }], meta: { last_page: 2 } },
+    });
+  });
+
+  it("refuse une méta inattendue", async () => {
+    fetchMock.mockResolvedValue(respond({ success: true, data: [], meta: { last_page: "2" } }));
+
+    expect(await apiGetWithMeta("articles", schema, metaSchema)).toMatchObject({ ok: false, status: 502 });
   });
 });

@@ -70,7 +70,7 @@ Aucun. La section n'apparaît sur l'accueil que lorsqu'un témoignage réel est 
 
 ### Photographies
 
-Les photographies du site historique sont authentiques mais trop petites pour être réutilisées (150 à 1074 px de large). En attendant celles de l'école, 23 photographies du **domaine public (CC0 1.0)** illustrent le site. Chacune est enregistrée comme photo d'illustration et affichée avec la mention correspondante : aucune n'est présentée comme une vue de l'EPHT.
+Les photographies du site historique sont authentiques mais trop petites pour être réutilisées (150 à 1074 px de large). En attendant celles de l'école, 23 photographies du **domaine public (CC0 1.0)** illustrent le site. Chacune est enregistrée comme photo d'illustration dans la médiathèque ; à la demande de l'école, la mention « Photo d'illustration » n'est plus affichée sur le site. Elles sont à remplacer par les photographies de l'école dès qu'elles seront disponibles.
 
 | Fichier | Emplacement | Auteur | Source |
 | --- | --- | --- | --- |

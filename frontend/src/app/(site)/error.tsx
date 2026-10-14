@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 import { StatusPage } from "@/components/system/StatusPage";
-import { ButtonLink } from "@/components/ui/Button";
+import { ButtonLink, buttonClasses } from "@/components/ui/Button";
 import { getDictionary } from "@/i18n";
 import { routes } from "@/lib/routes";
 
@@ -25,7 +25,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
       <button
         type="button"
         onClick={reset}
-        className="inline-flex h-14 items-center justify-center rounded-[2px] bg-cyan-400 px-7 font-semibold text-ink transition-colors duration-300 hover:bg-cyan-300"
+        className={buttonClasses()}
       >
         {t.errors.retry}
       </button>

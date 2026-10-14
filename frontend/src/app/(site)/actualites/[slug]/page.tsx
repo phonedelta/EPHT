@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { RevealImage } from "@/components/motion/Reveal";
-import { PageIntro } from "@/components/system/PageIntro";
+import { FinalCta } from "@/components/home/FinalCta";
+import { PageTransition } from "@/components/motion/PageTransition";
+import { Reveal, RevealGroup, RevealImage, RevealItem } from "@/components/motion/Reveal";
+import { ArticleCard } from "@/components/news/ArticleCard";
+import { PageHero } from "@/components/system/PageHero";
 import { ArrowLink } from "@/components/ui/Button";
 import { Photo } from "@/components/ui/Photo";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getDictionary } from "@/i18n";
-import { dataOr, getArticle, getLatestArticles } from "@/lib/api/queries";
-import { formatDate } from "@/lib/format";
+import { dataOr, getAllArticles, getArticle, getSiteSettings } from "@/lib/api/queries";
+import { siteSettingsSchema } from "@/lib/api/schemas";
+import { formatDate, paragraphsOf } from "@/lib/format";
 import { routes } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
 
@@ -18,7 +23,7 @@ export const ensureStatic = "navigation";
 const PLACEHOLDER = "__aucun-article__";
 
 export async function generateStaticParams() {
-  const articles = dataOr(await getLatestArticles(12), []);
+  const articles = dataOr(await getAllArticles(), { articles: [], categories: [] }).articles;
 
   return articles.length > 0 ? articles.map(({ slug }) => ({ slug })) : [{ slug: PLACEHOLDER }];
 }
@@ -31,36 +36,17 @@ export async function generateMetadata({ params }: PageProps<"/actualites/[slug]
     return {};
   }
 
+  const { article } = result.data;
+
   return pageMetadata({
-    title: result.data.title,
-    description: result.data.excerpt,
+    title: article.seo.title ?? article.title,
+    description: article.seo.description ?? article.excerpt,
     path: routes.article(slug),
-    image: result.data.cover,
+    image: article.cover,
   });
 }
 
-/**
- * Texte brut des paragraphes d'un contenu HTML. Tant que l'éditeur et le
- * nettoyage côté serveur ne sont pas en place, aucun HTML venu de l'API n'est
- * injecté dans la page.
- */
-function paragraphsOf(html: string): string[] {
-  return html
-    .split(/<\/p>|<br\s*\/?>/i)
-    .map((chunk) =>
-      chunk
-        .replace(/<[^>]*>/g, "")
-        .replace(/&nbsp;/g, " ")
-        .replace(/&amp;/g, "&")
-        .replace(/&lt;/g, "<")
-        .replace(/&gt;/g, ">")
-        .replace(/&quot;/g, '"')
-        .replace(/&#0?39;/g, "'")
-        .trim(),
-    )
-    .filter(Boolean);
-}
-
+/** Article complet, suivi des articles de la même catégorie. */
 export default async function ArticlePage({ params }: PageProps<"/actualites/[slug]">) {
   const { slug } = await params;
   const result = slug === PLACEHOLDER ? null : await getArticle(slug);
@@ -70,34 +56,72 @@ export default async function ArticlePage({ params }: PageProps<"/actualites/[sl
   }
 
   const t = getDictionary();
-  const article = result.data;
+  const { article, related } = result.data;
+  const settings = dataOr(await getSiteSettings(), siteSettingsSchema.parse({}));
 
   return (
-    <article>
-      <PageIntro eyebrow={article.category?.name ?? t.nav.news} title={article.title} text={article.excerpt}>
-        {article.published_at ? (
-          <p className="mt-6 text-[0.9375rem] text-muted">
-            <time dateTime={article.published_at}>{formatDate(article.published_at)}</time>
-          </p>
-        ) : null}
-      </PageIntro>
+    <PageTransition>
+      <article>
+        <PageHero
+          eyebrow={article.category?.name ?? t.nav.news}
+          title={article.title}
+          lead={article.excerpt}
+          parents={[{ label: t.nav.news, href: routes.news }]}
+          path={routes.article(article.slug)}
+        >
+          {article.published_at ? (
+            <p className="mt-6 text-[0.9375rem] text-muted">
+              <time dateTime={article.published_at}>{formatDate(article.published_at)}</time>
+            </p>
+          ) : null}
+        </PageHero>
 
-      <div className="container-page py-14 md:py-20">
-        {article.cover ? (
-          <RevealImage>
-            <Photo media={article.cover} sizes="(min-width: 1344px) 1248px, 100vw" className="aspect-[16/9] lg:aspect-[21/9]" />
-          </RevealImage>
-        ) : null}
+        <div className="bg-surface pb-16 pt-10 md:pb-20 md:pt-12">
+          <div className="container-page">
+            {article.cover ? (
+              <RevealImage parallax className="rounded-2xl">
+                <Photo
+                  media={article.cover}
+                  preload
+                  sizes="(min-width: 1320px) 1240px, 100vw"
+                  className="aspect-[16/9] lg:aspect-[21/9]"
+                />
+              </RevealImage>
+            ) : null}
 
-        <div className="mx-auto mt-12 grid max-w-[42rem] gap-5 text-[1.0625rem] leading-[1.75] text-ink-soft">
-          {paragraphsOf(article.content).map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-          <div className="mt-6 border-t border-line pt-8">
-            <ArrowLink href={routes.news}>{t.home.news.all}</ArrowLink>
+            <Reveal className="mx-auto mt-12 grid max-w-[42rem] gap-5 text-[1.0625rem] leading-[1.8] text-ink-soft">
+              {paragraphsOf(article.content).map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+              <div className="mt-6 border-t border-line pt-8">
+                <ArrowLink href={routes.news}>{t.home.news.all}</ArrowLink>
+              </div>
+            </Reveal>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
+
+      {related.length > 0 ? (
+        <section aria-labelledby="related-title" className="section-y bg-background">
+          <div className="container-page">
+            <SectionHeader
+              id="related-title"
+              eyebrow={t.pages.news.relatedEyebrow}
+              title={t.pages.news.relatedTitle}
+              className="mb-10"
+            />
+            <RevealGroup className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6" stagger={0.06}>
+              {related.map((item) => (
+                <RevealItem key={item.id}>
+                  <ArticleCard article={item} />
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </div>
+        </section>
+      ) : null}
+
+      <FinalCta content={settings.home.cta} />
+    </PageTransition>
   );
 }

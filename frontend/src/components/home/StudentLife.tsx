@@ -55,7 +55,7 @@ export function StudentLife({ content, galleries }: StudentLifeProps) {
   return (
     <section aria-labelledby="student-life-title" className="section-y bg-surface">
       <div className="container-page">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeader
             id="student-life-title"
             eyebrow={t.eyebrow}
@@ -63,12 +63,12 @@ export function StudentLife({ content, galleries }: StudentLifeProps) {
             intro={content.intro}
             className="max-w-[40rem]"
           />
-          <Reveal delay={0.1} className="shrink-0">
+          <Reveal delay={0.08} className="shrink-0">
             <ArrowLink href={routes.studentLife}>{t.cta}</ArrowLink>
           </Reveal>
         </div>
 
-        <div className="mt-12 lg:mt-16">
+        <div className="mt-10 lg:mt-12">
           <StudentLifeGallery items={items} />
         </div>
       </div>

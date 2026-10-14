@@ -61,6 +61,35 @@ const general = z
   })
   .prefault({});
 
+/**
+ * Horaires d'ouverture : un champ JSON libre dans l'administration, ramené ici
+ * à des lignes de texte (« Lundi – vendredi : 8 h 30 – 18 h »).
+ */
+const openingHours = z
+  .unknown()
+  .optional()
+  .transform((value): string[] => {
+    const line = (entry: unknown): string | null => {
+      if (typeof entry === "string") {
+        return entry.trim() || null;
+      }
+
+      if (entry && typeof entry === "object") {
+        const record = entry as Record<string, unknown>;
+        const label = [record.days, record.day, record.label].find((part) => typeof part === "string");
+        const hours = [record.hours, record.time, record.value].find((part) => typeof part === "string");
+
+        return [label, hours].filter(Boolean).join(" : ") || null;
+      }
+
+      return null;
+    };
+
+    const entries = Array.isArray(value) ? value : value === null || value === undefined ? [] : [value];
+
+    return entries.map(line).filter((entry): entry is string => entry !== null);
+  });
+
 const contact = z
   .object({
     address_lines: list(z.string()),
@@ -71,6 +100,7 @@ const contact = z
     mobile: text,
     email: text,
     whatsapp: text,
+    opening_hours: openingHours,
     latitude: z.number().nullish().transform((value) => value ?? null),
     longitude: z.number().nullish().transform((value) => value ?? null),
     map_url: text,
@@ -186,6 +216,56 @@ export type Gallery = z.infer<typeof gallerySchema>;
 
 export const galleryListSchema = z.array(gallerySchema);
 
+// --- Fiche d'une formation ----------------------------------------------------
+
+/**
+ * Élément d'une liste éditoriale de la fiche (objectif, module du programme…) :
+ * un simple texte, ou un titre accompagné d'un détail.
+ */
+const detailItem = z
+  .union([
+    z.string(),
+    z
+      .object({
+        title: z.string().optional(),
+        label: z.string().optional(),
+        name: z.string().optional(),
+        text: z.string().nullish(),
+        description: z.string().nullish(),
+        content: z.string().nullish(),
+      })
+      .passthrough(),
+  ])
+  .transform((item) => {
+    if (typeof item === "string") {
+      return { title: item.trim(), text: null };
+    }
+
+    return {
+      title: (item.title ?? item.label ?? item.name ?? "").trim(),
+      text: (item.text ?? item.description ?? item.content ?? "").trim() || null,
+    };
+  });
+
+export type DetailItem = z.infer<typeof detailItem>;
+
+const detailList = list(detailItem).transform((items) => items.filter((item) => item.title !== ""));
+
+export const formationDetailSchema = formationSchema.extend({
+  description: text,
+  objectives: detailList,
+  skills: detailList,
+  program: detailList,
+  admission_requirements: detailList,
+  career_opportunities: detailList,
+  required_documents: detailList,
+  faq: list(z.object({ question: z.string(), answer: z.string() })),
+  gallery: gallerySchema.nullish().transform((value) => value ?? null),
+  seo: z.object({ title: text, description: text }).prefault({}),
+});
+
+export type FormationDetail = z.infer<typeof formationDetailSchema>;
+
 // --- Articles ----------------------------------------------------------------
 
 export const articleSchema = z.object({
@@ -202,9 +282,23 @@ export type Article = z.infer<typeof articleSchema>;
 
 export const articleListSchema = z.array(articleSchema);
 
-export const articleDetailSchema = articleSchema.extend({ content: z.string() });
+export type ArticleCategory = z.infer<typeof category>;
+
+/** `meta` d'une page de la liste des articles. */
+export const articlePageMetaSchema = z.object({
+  last_page: z.number(),
+  categories: list(category),
+});
+
+export const articleDetailSchema = articleSchema.extend({
+  content: z.string(),
+  seo: z.object({ title: text, description: text }).prefault({}),
+});
 
 export type ArticleDetail = z.infer<typeof articleDetailSchema>;
+
+/** `meta` d'un article : jusqu'à trois articles de la même catégorie. */
+export const articleDetailMetaSchema = z.object({ related: list(articleSchema) }).prefault({});
 
 // --- Témoignages -------------------------------------------------------------
 
@@ -223,3 +317,52 @@ export const testimonialSchema = z.object({
 export type Testimonial = z.infer<typeof testimonialSchema>;
 
 export const testimonialListSchema = z.array(testimonialSchema);
+
+// --- Événements, offres, partenaires -------------------------------------------
+
+export const eventSchema = z.object({
+  id: z.number(),
+  slug: z.string(),
+  title: z.string(),
+  summary: text,
+  description: text,
+  location: text,
+  starts_at: z.string(),
+  ends_at: z.string().nullable(),
+  cover: optionalMedia,
+});
+
+export type SchoolEvent = z.infer<typeof eventSchema>;
+
+export const eventListSchema = z.array(eventSchema);
+
+export const jobOfferSchema = z.object({
+  id: z.number(),
+  slug: z.string(),
+  type: z.object({ value: z.string(), label: z.string() }),
+  title: z.string(),
+  company: text,
+  city: text,
+  description: text,
+  apply_url: text,
+  apply_email: text,
+  published_at: z.string().nullable(),
+  expires_at: z.string().nullable(),
+});
+
+export type JobOffer = z.infer<typeof jobOfferSchema>;
+
+export const jobOfferListSchema = z.array(jobOfferSchema);
+
+export const partnerSchema = z.object({
+  id: z.number(),
+  slug: z.string(),
+  name: z.string(),
+  description: text,
+  website_url: text,
+  logo: optionalMedia,
+});
+
+export type Partner = z.infer<typeof partnerSchema>;
+
+export const partnerListSchema = z.array(partnerSchema);

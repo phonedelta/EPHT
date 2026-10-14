@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
 
+import { Eyebrow } from "@/components/ui/SectionHeader";
+import { getDictionary } from "@/i18n";
+
 type StatusPageProps = {
   /** Repère discret : code d'erreur ou surtitre. */
   eyebrow: string;
@@ -12,17 +15,19 @@ type StatusPageProps = {
 export function StatusPage({ eyebrow, title, text, children }: StatusPageProps) {
   return (
     <section className="bg-background">
-      <div className="container-page flex min-h-[60svh] flex-col justify-center py-20 md:py-28">
-        <p className="eyebrow flex items-center gap-3 text-cyan-700">
-          <span aria-hidden="true" className="h-px w-8 bg-cyan-500" />
-          {eyebrow}
-        </p>
-        <h1 className="mt-6 max-w-[20ch] font-display text-[clamp(2.25rem,1.4rem+3.4vw,3.75rem)] leading-[1.06] text-ink">
-          {title}
-        </h1>
-        <p className="text-lead mt-6 max-w-[34rem] text-ink-soft">{text}</p>
-        {children ? <div className="mt-9 flex flex-col gap-3 sm:flex-row">{children}</div> : null}
+      <div className="container-page flex min-h-[60svh] flex-col justify-center py-16 md:py-24">
+        <Eyebrow>{eyebrow}</Eyebrow>
+        <h1 className="text-display mt-5 max-w-[20ch] text-ink">{title}</h1>
+        <p className="text-lead mt-5 max-w-[34rem] text-muted">{text}</p>
+        {children ? <div className="mt-8 flex flex-col gap-3 sm:flex-row">{children}</div> : null}
       </div>
     </section>
   );
+}
+
+/** L'API ne répond pas : la page l'annonce plutôt que d'afficher un contenu partiel. */
+export function UnavailablePage() {
+  const t = getDictionary().errors;
+
+  return <StatusPage eyebrow="503" title={t.unavailableTitle} text={t.unavailableText} />;
 }

@@ -1,14 +1,63 @@
 import type { Metadata } from "next";
 
-import { Placeholder } from "@/components/system/Placeholder";
+import { FormationCatalog } from "@/components/formations/FormationCatalog";
+import { Admissions } from "@/components/home/Admissions";
+import { FinalCta } from "@/components/home/FinalCta";
+import { PageTransition } from "@/components/motion/PageTransition";
+import { PageHero } from "@/components/system/PageHero";
+import { UnavailablePage } from "@/components/system/StatusPage";
+import { ButtonLink } from "@/components/ui/Button";
 import { getDictionary } from "@/i18n";
+import { dataOr, getFormations, getSiteSettings } from "@/lib/api/queries";
 import { routes } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
 
-const title = getDictionary().nav.formations;
+export async function generateMetadata(): Promise<Metadata> {
+  const home = dataOr(await getSiteSettings(), null)?.home;
 
-export const metadata: Metadata = pageMetadata({ title, path: routes.formations });
+  return pageMetadata({
+    title: getDictionary().nav.formations,
+    description: home?.formations.intro,
+    path: routes.formations,
+    image: home?.practice.image_tertiary,
+  });
+}
 
-export default function FormationsPage() {
-  return <Placeholder title={title} />;
+/** Catalogue des formations, filtrable par famille de métiers. */
+export default async function FormationsPage() {
+  const [settingsResult, formationsResult] = await Promise.all([getSiteSettings(), getFormations()]);
+
+  if (!settingsResult.ok) {
+    return <UnavailablePage />;
+  }
+
+  const t = getDictionary();
+  const { home } = settingsResult.data;
+
+  return (
+    <PageTransition>
+      <PageHero
+        eyebrow={t.pages.formations.eyebrow}
+        title={home.formations.title ?? t.nav.formations}
+        crumb={t.nav.formations}
+        lead={home.formations.intro}
+        path={routes.formations}
+        image={home.practice.image_tertiary}
+        actions={
+          <ButtonLink href={routes.admissions} size="lg">
+            {t.nav.apply}
+          </ButtonLink>
+        }
+      />
+
+      <section aria-label={t.nav.formations} className="section-y bg-surface">
+        <div className="container-page">
+          <FormationCatalog formations={dataOr(formationsResult, [])} />
+        </div>
+      </section>
+
+      <Admissions content={home.admissions} />
+      <FinalCta content={home.cta} />
+    </PageTransition>
+  );
 }

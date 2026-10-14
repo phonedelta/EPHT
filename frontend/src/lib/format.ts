@@ -30,3 +30,55 @@ export function phoneHref(phone: string): string {
 export function ordinal(index: number): string {
   return String(index + 1).padStart(2, "0");
 }
+
+const dayOfMonth = new Intl.DateTimeFormat(defaultLocale, { day: "numeric", timeZone: TIME_ZONE });
+const shortMonth = new Intl.DateTimeFormat(defaultLocale, { month: "short", timeZone: TIME_ZONE });
+const timeOfDay = new Intl.DateTimeFormat(defaultLocale, { hour: "2-digit", minute: "2-digit", timeZone: TIME_ZONE });
+
+/** Jour et mois abrégé d'une date, pour un calendrier : « 13 », « oct. ». */
+export function dateBadge(iso: string): { day: string; month: string } | null {
+  const date = new Date(iso);
+
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return { day: dayOfMonth.format(date), month: shortMonth.format(date) };
+}
+
+/** Heure à l'heure du Maroc : « 09:30 » — chaîne vide si la date est invalide. */
+export function formatTime(iso: string | null): string {
+  if (!iso) {
+    return "";
+  }
+
+  const date = new Date(iso);
+
+  return Number.isNaN(date.getTime()) ? "" : timeOfDay.format(date);
+}
+
+/**
+ * Texte brut des paragraphes d'un contenu HTML. Tant que l'éditeur et le
+ * nettoyage côté serveur ne sont pas en place, aucun HTML venu de l'API n'est
+ * injecté dans la page.
+ */
+export function paragraphsOf(html: string | null): string[] {
+  if (!html) {
+    return [];
+  }
+
+  return html
+    .split(/<\/p>|<\/li>|<br\s*\/?>/i)
+    .map((chunk) =>
+      chunk
+        .replace(/<[^>]*>/g, "")
+        .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#0?39;/g, "'")
+        .trim(),
+    )
+    .filter(Boolean);
+}

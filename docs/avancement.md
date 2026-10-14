@@ -27,7 +27,8 @@
 - Logo officiel vectorisé, variantes claire et sombre, favicon.
 - En-tête (bandeau de coordonnées, navigation, sous-menu des formations, menu mobile) et pied de page.
 - **Page d'accueil complète**, en douze sections, entièrement alimentée par l'API.
-- Routes de toutes les pages publiques ; fiche de formation et article en version initiale.
+- **Pages intérieures** dans le même design que l'accueil, alimentées par l'API : L'École, catalogue des formations (filtre par famille), fiche d'une formation (rubriques affichées seulement si l'école les a renseignées), Admissions, Infrastructures, Vie à l'EPHT (galerie, événements, témoignages), Stages & Carrières (offres, partenaires), Actualités (filtre, « Voir plus »), article (articles de la même catégorie), Contact. Aucun texte n'y est rédigé à la place de l'école : un bloc sans données n'apparaît pas.
+- Animations sur tout le site : transitions entre les pages (API View Transitions), titres révélés mot à mot, parallaxe discrète, barre de progression, retour en haut de page.
 - SEO : métadonnées, Open Graph, lien canonique, `sitemap.xml`, `robots.txt`, données structurées, redirection des anciennes adresses.
 - Pages 404 et d'erreur ; état « indisponible » si l'API ne répond pas.
 
@@ -63,7 +64,7 @@ Vérifié en conditions réelles, dans un navigateur piloté automatiquement :
 
 | Phase | Contenu |
 | --- | --- |
-| Pages publiques | L'École, catalogue des formations (recherche et filtres), fiche complète d'une formation, Infrastructures, Vie à l'EPHT, Stages & Carrières, Actualités (liste, recherche, pagination, articles similaires), Contact (carte, WhatsApp), mentions légales, confidentialité |
+| Pages publiques | Contenus à fournir par l'école (voir [`contenus-a-confirmer.md`](contenus-a-confirmer.md)) : programme détaillé des formations, carte et WhatsApp de la page Contact, mentions légales, politique de confidentialité |
 | Formulaires | Candidature en quatre étapes avec dépôt de documents, référence unique, protection contre la double soumission ; formulaire de contact ; notifications par e-mail en file d'attente ; protection anti-spam |
 | Administration | Connexion Sanctum, tableau de bord, candidatures (statuts, notes, historique, export CSV), formations, actualités (éditeur et nettoyage du HTML), galeries, événements, messages, offres, médiathèque, contenu du site, paramètres ; Policies par rôle ; journal des actions |
 | Finalisation | Accessibilité, performances, tests de bout en bout, déploiement |

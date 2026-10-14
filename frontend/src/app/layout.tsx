@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Serif_Display, Manrope } from "next/font/google";
+import { DM_Sans, Plus_Jakarta_Sans } from "next/font/google";
 
 import { defaultLocale } from "@/i18n/config";
 import { dataOr, getSiteSettings } from "@/lib/api/queries";
@@ -7,19 +7,17 @@ import { siteMetadata } from "@/lib/seo";
 
 import "./globals.css";
 
-// Titres éditoriaux.
-const display = DM_Serif_Display({
+// Titres, surtitres et chiffres.
+const display = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-dm-serif",
+  variable: "--font-jakarta",
   display: "swap",
 });
 
 // Navigation, paragraphes et formulaires.
-const sans = Manrope({
+const sans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-manrope",
+  variable: "--font-dm-sans",
   display: "swap",
 });
 
@@ -28,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#fcfdfe",
+  themeColor: "#ffffff",
   colorScheme: "light",
 };
 

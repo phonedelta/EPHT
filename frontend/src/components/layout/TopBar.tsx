@@ -9,6 +9,8 @@ type TopBarProps = {
   social: SocialSettings;
 };
 
+const linkClass = "flex items-center gap-2 transition-colors duration-200 hover:text-white";
+
 /**
  * Bandeau de coordonnées au-dessus de l'en-tête (grands écrans). Les valeurs
  * viennent des paramètres du site ; une coordonnée vide n'est pas affichée.
@@ -22,9 +24,9 @@ export function TopBar({ contact, social }: TopBarProps) {
   }
 
   return (
-    <div className="on-dark hidden bg-ink text-[0.8125rem] text-white/80 lg:block">
-      <div className="container-page flex h-10 items-center justify-between gap-8">
-        <ul className="flex items-center gap-7">
+    <div className="on-dark hidden bg-ink text-xs text-white/80 lg:block">
+      <div className="container-page flex h-9 items-center justify-between gap-8">
+        <ul className="flex items-center gap-8">
           {location ? (
             <li className="flex items-center gap-2">
               <MapPin aria-hidden="true" strokeWidth={1.5} className="size-3.5 text-cyan-300" />
@@ -33,10 +35,7 @@ export function TopBar({ contact, social }: TopBarProps) {
           ) : null}
           {contact.phone ? (
             <li>
-              <a
-                href={phoneHref(contact.phone)}
-                className="flex items-center gap-2 transition-colors duration-300 hover:text-white"
-              >
+              <a href={phoneHref(contact.phone)} className={linkClass}>
                 <Phone aria-hidden="true" strokeWidth={1.5} className="size-3.5 text-cyan-300" />
                 {contact.phone}
               </a>
@@ -44,10 +43,7 @@ export function TopBar({ contact, social }: TopBarProps) {
           ) : null}
           {contact.email ? (
             <li>
-              <a
-                href={`mailto:${contact.email}`}
-                className="flex items-center gap-2 transition-colors duration-300 hover:text-white"
-              >
+              <a href={`mailto:${contact.email}`} className={linkClass}>
                 <Mail aria-hidden="true" strokeWidth={1.5} className="size-3.5 text-cyan-300" />
                 {contact.email}
               </a>
@@ -64,9 +60,9 @@ export function TopBar({ contact, social }: TopBarProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${SOCIAL_LABELS[network]} (nouvel onglet)`}
-                  className="block text-white/70 transition-colors duration-300 hover:text-cyan-300"
+                  className="block text-white/70 transition-colors duration-200 hover:text-cyan-300"
                 >
-                  <SocialIcon network={network} className="size-4" />
+                  <SocialIcon network={network} className="size-3.5" />
                 </a>
               </li>
             ))}

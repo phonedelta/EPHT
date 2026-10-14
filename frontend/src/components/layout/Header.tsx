@@ -18,7 +18,7 @@ export function Header({ settings, formations }: HeaderProps) {
     <>
       <a
         href="#contenu"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-ink focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-ink focus:px-5 focus:py-3 focus:text-sm focus:font-medium focus:text-white"
       >
         {t.common.skipToContent}
       </a>
@@ -31,6 +31,7 @@ export function Header({ settings, formations }: HeaderProps) {
         }))}
         contact={{ phone: settings.contact.phone, email: settings.contact.email }}
         siteName={settings.general.name ?? "EPHT"}
+        fullName={settings.general.full_name}
       />
     </>
   );

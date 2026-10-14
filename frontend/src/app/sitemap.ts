@@ -1,12 +1,12 @@
 import type { MetadataRoute } from "next";
 
-import { dataOr, getFormations, getLatestArticles } from "@/lib/api/queries";
+import { dataOr, getAllArticles, getFormations } from "@/lib/api/queries";
 import { SITE_URL } from "@/lib/env";
 import { routes } from "@/lib/routes";
 
 /** Plan du site : pages fixes, formations et articles publiés dans l'API. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [formations, articles] = await Promise.all([getFormations(), getLatestArticles(24)]);
+  const [formations, articles] = await Promise.all([getFormations(), getAllArticles()]);
 
   const pages: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "weekly", priority: 1 },
@@ -29,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const articlePages: MetadataRoute.Sitemap = dataOr(articles, []).map((article) => ({
+  const articlePages: MetadataRoute.Sitemap = dataOr(articles, { articles: [], categories: [] }).articles.map((article) => ({
     url: `${SITE_URL}${routes.article(article.slug)}`,
     lastModified: article.published_at ?? undefined,
     changeFrequency: "yearly",

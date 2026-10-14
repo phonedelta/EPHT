@@ -25,16 +25,16 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
           display: "grid",
           placeItems: "center",
           padding: "2rem",
-          background: "#f6fafb",
-          color: "#18252b",
+          background: "#f8fafa",
+          color: "#17262c",
           fontFamily: "system-ui, -apple-system, 'Segoe UI', sans-serif",
         }}
       >
         <main style={{ maxWidth: "32rem" }}>
-          <h1 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: "2.25rem", lineHeight: 1.1, margin: 0 }}>
+          <h1 style={{ fontWeight: 600, fontSize: "2rem", lineHeight: 1.15, letterSpacing: "-0.02em", margin: 0 }}>
             Une erreur est survenue.
           </h1>
-          <p style={{ marginTop: "1rem", lineHeight: 1.6, color: "#3b4a52" }}>
+          <p style={{ marginTop: "1rem", lineHeight: 1.6, color: "#66757b" }}>
             Le site n’a pas pu s’afficher. Vous pouvez réessayer dans un instant.
           </p>
           <button
@@ -42,14 +42,14 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
             onClick={reset}
             style={{
               marginTop: "1.75rem",
-              height: "3.25rem",
-              padding: "0 1.75rem",
+              height: "2.75rem",
+              padding: "0 1.25rem",
               border: 0,
-              borderRadius: 2,
-              background: "#7cc8da",
-              color: "#18252b",
+              borderRadius: 8,
+              background: "#4aafc5",
+              color: "#17262c",
               font: "inherit",
-              fontWeight: 600,
+              fontWeight: 500,
               cursor: "pointer",
             }}
           >
