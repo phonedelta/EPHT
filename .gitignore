@@ -1,0 +1,20 @@
+# Systèmes et éditeurs
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Fichiers d'environnement : seuls les exemples sont versionnés
+.env
+.env.*
+!.env.example
+
+# Journaux
+*.log
+
+# Les dépendances et artefacts de build sont ignorés par les .gitignore
+# de frontend/ et de backend/.
+
+# Graphe de connaissances généré localement par graphify
+graphify-out/

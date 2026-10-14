@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/*
+ * Design system EPHT.
+ *
+ * La palette part des couleurs mesurées sur le logo officiel : le croissant va
+ * d'un cyan clair (#B8E3EE) à un cyan soutenu (#5AAEC4), teinte 192°. Les tons
+ * 600 à 900 prolongent cette teinte vers le sombre pour obtenir des textes et
+ * des liens lisibles sur fond clair (contraste AA).
+ */
+@theme {
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-dm-serif), ui-serif, Georgia, "Times New Roman", serif;
+
+  --color-cyan-50: #eff8fa;
+  --color-cyan-100: #dff1f6;
+  --color-cyan-200: #c3e6ef;
+  --color-cyan-300: #a5ddea;
+  --color-cyan-400: #7cc8da;
+  --color-cyan-500: #5bb5ca;
+  --color-cyan-600: #3d9bb2;
+  --color-cyan-700: #236e82;
+  --color-cyan-800: #1b5666;
+  --color-cyan-900: #153f4b;
+
+  /* Texte : titres, texte courant, texte secondaire. */
+  --color-ink: #18252b;
+  --color-ink-soft: #3b4a52;
+  --color-muted: #5a6a72;
+
+  /* Fonds et filets. */
+  --color-background: #f6fafb;
+  --color-surface: #fcfdfe;
+  --color-line: #dfeaef;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink-soft);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-cyan-300);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cyan-700);
+    outline-offset: 3px;
+  }
+
+  /* Sur fond sombre, le contour de focus passe au cyan clair. */
+  .on-dark :focus-visible {
+    outline-color: var(--color-cyan-300);
+  }
+}
+
+/* --- Mise en page --------------------------------------------------------- */
+
+@utility container-page {
+  width: 100%;
+  max-width: 84rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+
+  @media (min-width: 48rem) {
+    padding-inline: 2.25rem;
+  }
+
+  @media (min-width: 80rem) {
+    padding-inline: 3rem;
+  }
+}
+
+@utility section-y {
+  padding-block: 4.5rem;
+
+  @media (min-width: 48rem) {
+    padding-block: 6.5rem;
+  }
+
+  @media (min-width: 80rem) {
+    padding-block: 8.5rem;
+  }
+}
+
+/* --- Typographie ---------------------------------------------------------- */
+
+/* Titre du hero : une seule fois par page. */
+@utility text-display {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 1.3rem + 4.5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.012em;
+}
+
+/* Titre de section. */
+@utility text-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.875rem, 1.3rem + 2vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.008em;
+}
+
+/* Titre d'élément : formation, article, espace. */
+@utility text-subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 1.15rem + 0.75vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+@utility text-lead {
+  font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  line-height: 1.65;
+}
+
+/* Surtitre en petites capitales espacées. */
+@utility eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* --- Interactions --------------------------------------------------------- */
+
+/* Soulignement qui se déploie de gauche à droite au survol. */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.5s var(--ease-out-expo);
+
+  &:hover,
+  &:focus-visible,
+  &[aria-current="page"] {
+    background-size: 100% 1px;
+  }
+}
+
+/* Zoom lent d'une photographie au survol de son conteneur (.group). */
+@utility photo-zoom {
+  transition: transform 1.2s var(--ease-out-expo);
+
+  @media (hover: hover) {
+    .group:hover &,
+    .group:focus-within & {
+      transform: scale(1.045);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
