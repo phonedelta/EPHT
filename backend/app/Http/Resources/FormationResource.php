@@ -32,6 +32,12 @@ class FormationResource extends JsonResource
                 'label' => $this->duration_label,
                 'months' => $this->duration_months,
             ],
+            // Places par groupe et nombre de groupes ; nul tant qu'ils ne sont pas communiqués.
+            'capacity' => $this->group_capacity === null ? null : [
+                'groups' => $this->group_count,
+                'per_group' => $this->group_capacity,
+                'total' => $this->group_count === null ? null : $this->group_count * $this->group_capacity,
+            ],
             'category' => new FormationCategoryResource($this->whenLoaded('category')),
             'cover' => new MediaResource($this->whenLoaded('cover')),
             'published_at' => $this->published_at?->toIso8601String(),

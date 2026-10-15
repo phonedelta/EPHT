@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 
+import { DiplomaLevels } from "@/components/formations/DiplomaLevels";
 import { FormationCatalog } from "@/components/formations/FormationCatalog";
+import { OfferFigures } from "@/components/formations/OfferFigures";
 import { Admissions } from "@/components/home/Admissions";
 import { FinalCta } from "@/components/home/FinalCta";
+import { Practice } from "@/components/home/Practice";
+import { WhyChoose } from "@/components/home/WhyChoose";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { PageHero } from "@/components/system/PageHero";
 import { UnavailablePage } from "@/components/system/StatusPage";
@@ -33,6 +37,7 @@ export default async function FormationsPage() {
 
   const t = getDictionary();
   const { home } = settingsResult.data;
+  const formations = dataOr(formationsResult, []);
 
   return (
     <PageTransition>
@@ -44,18 +49,23 @@ export default async function FormationsPage() {
         path={routes.formations}
         image={home.practice.image_tertiary}
         actions={
-          <ButtonLink href={routes.admissions} size="lg">
+          <ButtonLink href={routes.apply()} size="lg">
             {t.nav.apply}
           </ButtonLink>
         }
-      />
+      >
+        <OfferFigures formations={formations} className="mt-10" />
+      </PageHero>
 
       <section aria-label={t.nav.formations} className="section-y bg-surface">
         <div className="container-page">
-          <FormationCatalog formations={dataOr(formationsResult, [])} />
+          <FormationCatalog formations={formations} />
         </div>
       </section>
 
+      <DiplomaLevels formations={formations} sector={home.formations.sector} />
+      <Practice content={home.practice} />
+      <WhyChoose content={home.why} />
       <Admissions content={home.admissions} />
       <FinalCta content={home.cta} />
     </PageTransition>

@@ -53,7 +53,7 @@ class FormationsTest extends TestCase
             ->assertJsonPath('data.0.cover.url', $cover->url());
     }
 
-    public function test_level_diploma_and_duration_stay_null_until_confirmed(): void
+    public function test_level_diploma_duration_and_capacity_stay_null_until_confirmed(): void
     {
         Formation::factory()->create(['title' => 'A', 'sort_order' => 1]);
         Formation::factory()->create([
@@ -63,6 +63,8 @@ class FormationsTest extends TestCase
             'diploma' => 'Diplôme de Technicien',
             'duration_label' => '2 ans',
             'duration_months' => 24,
+            'group_count' => 2,
+            'group_capacity' => 20,
         ]);
 
         $this->getJson($this->api('formations'))
@@ -70,6 +72,8 @@ class FormationsTest extends TestCase
             ->assertJsonPath('data.0.level', null)
             ->assertJsonPath('data.0.diploma', null)
             ->assertJsonPath('data.0.duration', null)
+            ->assertJsonPath('data.0.capacity', null)
+            ->assertJsonPath('data.1.capacity', ['groups' => 2, 'per_group' => 20, 'total' => 40])
             ->assertJsonPath('data.1.level', 'Technicien')
             ->assertJsonPath('data.1.diploma', 'Diplôme de Technicien')
             ->assertJsonPath('data.1.duration', ['label' => '2 ans', 'months' => 24]);

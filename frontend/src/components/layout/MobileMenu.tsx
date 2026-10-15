@@ -188,7 +188,7 @@ export function MobileMenu({ open, onClose, navigation, formations, contact }: M
             </nav>
 
             <div className="shrink-0 border-t border-line bg-background px-5 py-6 sm:px-8">
-              <ButtonLink href={routes.admissions} className="w-full">
+              <ButtonLink href={routes.apply()} className="w-full">
                 {t.nav.apply}
               </ButtonLink>
               {contact.phone || contact.email ? (

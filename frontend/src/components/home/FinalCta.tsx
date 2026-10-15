@@ -40,7 +40,7 @@ export function FinalCta({ content, showContact = true }: FinalCtaProps) {
             <div className="lg:col-span-5 lg:col-start-8">
               {content.text ? <p className="text-lead text-ink">{content.text}</p> : null}
               <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <ButtonLink href={routes.admissions} variant="ink">
+                <ButtonLink href={routes.apply()} variant="ink">
                   {t.primary}
                 </ButtonLink>
                 {showContact ? (

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-import { FormationGrid } from "@/components/home/FormationGrid";
+import { ApplicationSection } from "@/components/admissions/ApplicationSection";
+import { CapacityTable } from "@/components/admissions/CapacityTable";
 import { StepsTimeline } from "@/components/home/StepsTimeline";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { ContactPanel } from "@/components/system/ContactPanel";
@@ -24,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-/** Admissions : les étapes de l'inscription, le choix de la formation, le contact. */
+/** Admissions : les étapes de l'inscription, le formulaire de demande, les formations, le contact. */
 export default async function AdmissionsPage() {
   const [settingsResult, formationsResult] = await Promise.all([getSiteSettings(), getFormations()]);
 
@@ -48,11 +49,11 @@ export default async function AdmissionsPage() {
         secondaryImage={home.hero.secondary_image}
         actions={
           <>
-            <ButtonLink href={routes.formations} size="lg">
-              {t.home.hero.primaryCta}
+            <ButtonLink href={routes.apply()} size="lg">
+              {t.nav.apply}
             </ButtonLink>
-            <ButtonLink href={routes.contact} variant="outline" size="lg" arrow={false}>
-              {t.home.cta.secondary}
+            <ButtonLink href={routes.formations} variant="outline" size="lg" arrow={false}>
+              {t.home.hero.primaryCta}
             </ButtonLink>
           </>
         }
@@ -67,23 +68,16 @@ export default async function AdmissionsPage() {
         </section>
       ) : null}
 
-      {formations.length > 0 ? (
-        <section aria-labelledby="choose-title" className="section-y bg-cyan-100">
-          <div className="container-page">
-            <SectionHeader
-              id="choose-title"
-              eyebrow={t.pages.admissions.chooseEyebrow}
-              title={t.pages.admissions.chooseTitle}
-              intro={home.formations.intro}
-              tinted
-              className="max-w-[40rem]"
-            />
-            <FormationGrid formations={formations} className="mt-10 lg:mt-12" />
-          </div>
-        </section>
-      ) : null}
+      <ApplicationSection formations={formations} contact={contact} />
 
-      <section className="section-y bg-surface">
+      <CapacityTable
+        formations={formations}
+        eyebrow={t.pages.admissions.chooseEyebrow}
+        title={t.pages.admissions.chooseTitle}
+        sector={home.formations.sector}
+      />
+
+      <section className="bg-surface pb-14 md:pb-20">
         <div className="container-page">
           <ContactPanel
             eyebrow={t.pages.admissions.onlineEyebrow}

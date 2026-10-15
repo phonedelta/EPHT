@@ -22,7 +22,7 @@ return [
     'general.name' => [Type::String, 'EPHT'],
     'general.full_name' => [Type::String, "École Privée d'Hôtellerie et de Tourisme"],
     'general.tagline' => [Type::String, 'École hôtelière à Salé'],
-    'general.description' => [Type::Text, "L'EPHT est un établissement privé de formation professionnelle situé à Salé. L'école prépare aux métiers de l'hôtellerie et de la restauration : service, cuisine et pâtisserie."],
+    'general.description' => [Type::Text, "L'EPHT est un établissement privé de formation professionnelle situé à Salé. L'école prépare aux métiers de l'hôtellerie et de la restauration : service, cuisine, pâtisserie, réception et gestion."],
     'general.logo' => [Type::Media, null],
 
     // --- Coordonnées -------------------------------------------------------
@@ -42,17 +42,17 @@ return [
 
     // --- Réseaux sociaux ---------------------------------------------------
     // Seul le lien présent sur le site historique est renseigné.
-    'social.facebook' => [Type::Url, 'https://www.facebook.com/epht.ecolehoteliere'],
-    'social.instagram' => [Type::Url, null],
-    'social.linkedin' => [Type::Url, null],
+    'social.facebook' => [Type::Url, 'https://www.facebook.com/ephtma'],
+    'social.instagram' => [Type::Url, 'https://www.instagram.com/ephtma'],
+    'social.linkedin' => [Type::Url, 'https://www.linkedin.com/company/ephtma'],
     'social.youtube' => [Type::Url, null],
-    'social.tiktok' => [Type::Url, null],
+    'social.tiktok' => [Type::Url, 'https://www.tiktok.com/@ephtma'],
 
     // --- Référencement -----------------------------------------------------
-    'seo.default_title' => [Type::String, 'EPHT — École hôtelière à Salé : restauration, cuisine, pâtisserie'],
+    'seo.default_title' => [Type::String, 'EPHT — École hôtelière à Salé : restauration, cuisine, pâtisserie, réception'],
     'seo.title_template' => [Type::String, '%s | EPHT Salé'],
-    'seo.default_description' => [Type::Text, "École Privée d'Hôtellerie et de Tourisme à Salé : formations professionnelles en restauration, cuisine et pâtisserie. Découvrez les formations et déposez votre demande d'inscription en ligne."],
-    'seo.keywords' => [Type::Json, ['école hôtelière Salé', 'formation cuisine Salé', 'formation pâtisserie Salé', 'formation restauration Maroc', 'formation professionnelle Salé']],
+    'seo.default_description' => [Type::Text, "École Privée d'Hôtellerie et de Tourisme à Salé : formations DQ, DT et DTS en restauration, cuisine, pâtisserie, réception et gestion hôtelière. Découvrez les formations et déposez votre demande d'inscription en ligne."],
+    'seo.keywords' => [Type::Json, ['école hôtelière Salé', 'formation cuisine Salé', 'formation pâtisserie Salé', 'formation restauration Maroc', 'formation réception hôtelière', 'gestion hôtelière DTS', 'formation professionnelle Salé']],
     'seo.og_image' => [Type::Media, null],
 
     // --- Accueil : hero ----------------------------------------------------
@@ -63,7 +63,7 @@ return [
 
     // --- Accueil : présentation -------------------------------------------
     'home.about.title' => [Type::String, "Une école tournée vers les métiers de l'hôtellerie."],
-    'home.about.lead' => [Type::Text, "À Salé, l'EPHT forme aux métiers de la restauration, de la cuisine et de la pâtisserie, avec une idée simple : apprendre un métier, c'est d'abord le pratiquer."],
+    'home.about.lead' => [Type::Text, "À Salé, l'EPHT forme aux métiers de la restauration, de la cuisine, de la pâtisserie et de l'hôtellerie, avec une idée simple : apprendre un métier, c'est d'abord le pratiquer."],
     'home.about.body' => [Type::Json, [
         "L'enseignement s'organise autour de la pratique. Les gestes se répètent en atelier, les techniques s'acquièrent en situation et chaque séance prépare aux exigences d'un environnement professionnel.",
         "Les formateurs accompagnent chaque étudiant tout au long de son parcours, de l'entrée en formation à la préparation de son insertion professionnelle.",
@@ -77,7 +77,9 @@ return [
 
     // --- Accueil : formations ---------------------------------------------
     'home.formations.title' => [Type::String, 'Des formations pour apprendre un métier.'],
-    'home.formations.intro' => [Type::Text, "Service en salle, cuisine, pâtisserie : chaque formation prépare à un métier précis de l'hôtellerie et de la restauration."],
+    'home.formations.intro' => [Type::Text, "Service en salle, cuisine, pâtisserie, réception, gestion : du diplôme de qualification au diplôme de technicien spécialisé, chaque formation prépare à un métier précis de l'hôtellerie et de la restauration."],
+    // Filière à laquelle appartiennent les programmes (annexe 1 de la convention THINK GROUPE – EPHT).
+    'home.formations.sector' => [Type::String, 'Hôtellerie, cuisine et restauration'],
 
     // --- Accueil : formation pratique -------------------------------------
     'home.practice.title' => [Type::String, 'Apprendre par la pratique.'],

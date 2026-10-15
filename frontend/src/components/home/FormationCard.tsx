@@ -1,11 +1,13 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Users } from "lucide-react";
 import Link from "next/link";
 
+import { DiplomaBadge } from "@/components/formations/DiplomaBadge";
 import { Photo } from "@/components/ui/Photo";
 import { getDictionary } from "@/i18n";
 import type { Formation } from "@/lib/api/schemas";
 import { cn } from "@/lib/cn";
 import { ordinal } from "@/lib/format";
+import { diplomaCode } from "@/lib/formations";
 import { routes } from "@/lib/routes";
 
 type FormationCardProps = {
@@ -21,12 +23,14 @@ type FormationCardProps = {
 };
 
 /**
- * Formation dans la liste de l'accueil. Durée et diplôme n'apparaissent que
- * s'ils sont renseignés, c'est-à-dire confirmés par l'école.
+ * Formation dans la liste de l'accueil. Durée, diplôme et capacité n'apparaissent
+ * que s'ils sont renseignés, c'est-à-dire confirmés par l'école.
  */
 export function FormationCard({ formation, index, sizes, wide = false, compact = false, className }: FormationCardProps) {
   const t = getDictionary().home.formations;
   const duration = formation.duration?.label ?? (formation.duration?.months ? `${formation.duration.months} mois` : null);
+  const code = diplomaCode(formation);
+  const places = formation.capacity?.per_group ?? null;
 
   return (
     <article
@@ -37,6 +41,10 @@ export function FormationCard({ formation, index, sizes, wide = false, compact =
         className,
       )}
     >
+      {code ? (
+        <DiplomaBadge code={code} title={formation.diploma} className="absolute left-4 top-4 z-10 shadow-[0_2px_8px_rgb(23_38_44/0.25)]" />
+      ) : null}
+
       {formation.cover ? (
         <Photo
           media={formation.cover}
@@ -83,30 +91,43 @@ export function FormationCard({ formation, index, sizes, wide = false, compact =
 
         <p className="mt-2.5 max-w-[34rem] text-[0.9375rem] leading-relaxed text-muted">{formation.summary}</p>
 
-        {duration || formation.diploma ? (
+        {duration ? (
           <dl className="mt-5 flex flex-wrap gap-2 text-[0.8125rem]">
-            {duration ? (
-              <div className="flex gap-1.5 rounded-md bg-cyan-50 px-2.5 py-1">
-                <dt className="text-ink-soft">{t.duration}</dt>
-                <dd className="font-medium text-ink">{duration}</dd>
-              </div>
-            ) : null}
-            {formation.diploma ? (
-              <div className="flex gap-1.5 rounded-md bg-cyan-50 px-2.5 py-1">
-                <dt className="text-ink-soft">{t.diploma}</dt>
-                <dd className="font-medium text-ink">{formation.diploma}</dd>
-              </div>
-            ) : null}
+            <div className="flex gap-1.5 rounded-md bg-cyan-50 px-2.5 py-1">
+              <dt className="text-ink-soft">{t.duration}</dt>
+              <dd className="font-medium text-ink">{duration}</dd>
+            </div>
           </dl>
         ) : null}
 
-        <p aria-hidden="true" className="mt-auto inline-flex items-center gap-2 pt-6 text-[0.9375rem] font-medium text-cyan-700">
-          {t.cta}
-          <ArrowRight
-            strokeWidth={1.75}
-            className="size-4 transition-transform duration-200 ease-out-soft group-hover:translate-x-1"
-          />
-        </p>
+        {/* Pied de carte : diplôme et capacité, puis l'invitation à consulter la fiche. */}
+        <div className="mt-auto pt-6">
+          {formation.diploma || places ? (
+            <dl className="flex items-center justify-between gap-3 border-t border-line pt-4 text-[0.8125rem]">
+              {formation.diploma ? (
+                <div className="min-w-0">
+                  <dt className="sr-only">{formation.level ? t.level : t.diploma}</dt>
+                  <dd className="leading-snug text-muted">{formation.level ?? formation.diploma}</dd>
+                </div>
+              ) : null}
+              {places ? (
+                <div className="flex shrink-0 items-center gap-1.5 rounded-full bg-cyan-50 px-2.5 py-1 font-medium text-cyan-800">
+                  <dt className="sr-only">{t.capacity}</dt>
+                  <Users aria-hidden="true" strokeWidth={1.75} className="size-3.5" />
+                  <dd className="tabular-nums">{t.places(places)}</dd>
+                </div>
+              ) : null}
+            </dl>
+          ) : null}
+
+          <p aria-hidden="true" className="mt-4 inline-flex items-center gap-2 text-[0.9375rem] font-medium text-cyan-700">
+            {t.cta}
+            <ArrowRight
+              strokeWidth={1.75}
+              className="size-4 transition-transform duration-200 ease-out-soft group-hover:translate-x-1"
+            />
+          </p>
+        </div>
       </div>
     </article>
   );

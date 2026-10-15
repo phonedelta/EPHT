@@ -213,7 +213,7 @@ export function HeaderBar({ navigation, formations, contact, siteName, fullName 
           <div className="flex shrink-0 items-center gap-3">
             {/* Le bouton fixe lui-même son affichage : c'est son conteneur qui le masque sur mobile. */}
             <div className="hidden sm:block">
-              <ButtonLink href={routes.admissions} size="sm" className="h-[2.625rem] whitespace-nowrap">
+              <ButtonLink href={routes.apply()} size="sm" className="h-[2.625rem] whitespace-nowrap">
                 {t.nav.apply}
               </ButtonLink>
             </div>

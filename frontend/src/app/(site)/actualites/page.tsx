@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 
 import { FinalCta } from "@/components/home/FinalCta";
 import { PageTransition } from "@/components/motion/PageTransition";
+import { StudentLife } from "@/components/home/StudentLife";
+import { FollowSchool } from "@/components/news/FollowSchool";
 import { NewsList } from "@/components/news/NewsList";
 import { PageHero } from "@/components/system/PageHero";
 import { UnavailablePage } from "@/components/system/StatusPage";
 import { getDictionary } from "@/i18n";
-import { dataOr, getAllArticles, getSiteSettings } from "@/lib/api/queries";
+import { dataOr, getAllArticles, getGalleries, getSiteSettings } from "@/lib/api/queries";
 import { routes } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
 
@@ -18,14 +20,18 @@ export const metadata: Metadata = pageMetadata({
 
 /** Toutes les actualités, filtrables par catégorie. */
 export default async function NewsPage() {
-  const [settingsResult, articlesResult] = await Promise.all([getSiteSettings(), getAllArticles()]);
+  const [settingsResult, articlesResult, studentLifeResult] = await Promise.all([
+    getSiteSettings(),
+    getAllArticles(),
+    getGalleries("student_life"),
+  ]);
 
   if (!settingsResult.ok) {
     return <UnavailablePage />;
   }
 
   const t = getDictionary();
-  const { home } = settingsResult.data;
+  const { home, social, contact } = settingsResult.data;
   const index = dataOr(articlesResult, { articles: [], categories: [] });
 
   return (
@@ -44,6 +50,8 @@ export default async function NewsPage() {
         </div>
       </section>
 
+      <FollowSchool social={social} contact={contact} />
+      <StudentLife content={home.student_life} galleries={dataOr(studentLifeResult, [])} />
       <FinalCta content={home.cta} />
     </PageTransition>
   );

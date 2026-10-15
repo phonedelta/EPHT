@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable([
     'formation_category_id', 'title', 'slug', 'summary', 'description', 'level', 'diploma',
-    'duration_label', 'duration_months', 'objectives', 'skills', 'program',
+    'duration_label', 'duration_months', 'group_count', 'group_capacity', 'objectives', 'skills', 'program',
     'admission_requirements', 'career_opportunities', 'required_documents', 'faq',
     'cover_media_id', 'gallery_id', 'status', 'published_at', 'sort_order',
     'seo_title', 'seo_description',
@@ -37,6 +37,8 @@ class Formation extends Model
             'status' => PublicationStatus::class,
             'published_at' => 'datetime',
             'duration_months' => 'integer',
+            'group_count' => 'integer',
+            'group_capacity' => 'integer',
             'sort_order' => 'integer',
             'objectives' => 'array',
             'skills' => 'array',

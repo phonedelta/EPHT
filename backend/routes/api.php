@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\MeController;
+use App\Http\Controllers\Api\V1\ApplicationController;
 use App\Http\Controllers\Api\V1\ArticleController;
+use App\Http\Controllers\Api\V1\ContactMessageController;
 use App\Http\Controllers\Api\V1\EventController;
 use App\Http\Controllers\Api\V1\FormationController;
 use App\Http\Controllers\Api\V1\GalleryController;
@@ -45,6 +47,13 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
         Route::get('testimonials', [TestimonialController::class, 'index'])->name('testimonials.index');
         Route::get('job-offers', [JobOfferController::class, 'index'])->name('job-offers.index');
         Route::get('partners', [PartnerController::class, 'index'])->name('partners.index');
+    });
+
+    // --- Formulaires publics ------------------------------------------------
+    // Limite de débit plus stricte que la lecture (voir AppServiceProvider).
+    Route::middleware('throttle:forms')->group(function (): void {
+        Route::post('applications', [ApplicationController::class, 'store'])->name('applications.store');
+        Route::post('contact', [ContactMessageController::class, 'store'])->name('contact.store');
     });
 
     // --- API d'administration ----------------------------------------------

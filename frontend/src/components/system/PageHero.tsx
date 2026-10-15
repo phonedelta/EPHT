@@ -1,5 +1,3 @@
-import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { AnimatedText } from "@/components/motion/AnimatedText";
@@ -36,7 +34,7 @@ type PageHeroProps = {
 
 /**
  * En-tête d'une page intérieure, dans la composition du hero de l'accueil :
- * fond dégradé, fil d'Ariane, surtitre, titre dont les mots montent un à un,
+ * fond dégradé, surtitre, titre dont les mots montent un à un,
  * introduction et, à droite, la photographie de la page sur son aplat cyan.
  */
 export function PageHero({
@@ -66,31 +64,13 @@ export function PageHero({
 
       <div
         className={cn(
-          "container-page relative grid gap-y-10 pb-14 pt-8 md:pb-16 lg:pt-10",
+          "container-page relative grid gap-y-10 pb-14 pt-12 md:pb-16 lg:pt-16",
           image && "lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:items-center lg:gap-x-12",
         )}
       >
         <div className={cn(image ? "max-w-[36rem]" : "max-w-[46rem]", !image && "lg:py-8")}>
-          <Reveal y={10}>
-            <nav aria-label={t.pages.breadcrumb}>
-              <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[0.8125rem] text-muted">
-                {crumbs.map((item) => (
-                  <li key={item.href} className="flex items-center gap-1.5">
-                    <Link href={item.href} className="transition-colors duration-200 hover:text-cyan-700">
-                      {item.label}
-                    </Link>
-                    <ChevronRight aria-hidden="true" strokeWidth={1.75} className="size-3.5 text-line-strong" />
-                  </li>
-                ))}
-                <li aria-current="page" className="max-w-[18rem] truncate font-medium text-ink">
-                  {crumb}
-                </li>
-              </ol>
-            </nav>
-          </Reveal>
-
           <Reveal delay={0.05} y={10}>
-            <p className="mt-8 font-display text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700 lg:mt-10">
+            <p className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">
               {eyebrow}
             </p>
           </Reveal>

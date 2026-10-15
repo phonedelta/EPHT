@@ -22,7 +22,7 @@ export function Admissions({ content }: { content: HomeSettings["admissions"] })
           <SectionHeader id="admissions-title" eyebrow={t.eyebrow} title={content.title} className="lg:col-span-6" />
           <Reveal delay={0.08} className="lg:col-span-5 lg:col-start-8">
             {content.intro ? <p className="text-lead text-ink-soft">{content.intro}</p> : null}
-            <ButtonLink href={routes.admissions} variant="ink" className="mt-6">
+            <ButtonLink href={routes.apply()} variant="ink" className="mt-6">
               {t.cta}
             </ButtonLink>
           </Reveal>

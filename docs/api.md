@@ -57,6 +57,8 @@ Lecture seule. Seuls les contenus publiés sont renvoyés.
 | GET | `/testimonials` | Témoignages validés — liste vide tant qu'aucun n'est publié |
 | GET | `/job-offers` | Offres publiées et non expirées. `type` (`stage`, `emploi`) |
 | GET | `/partners` | Partenaires publiés |
+| POST | `/applications` | Demande d'inscription (limite `forms` : 5 par minute, 30 par heure et par adresse IP). Champs : `formation` (slug d'une formation publiée), `first_name`, `last_name`, `email`, `phone`, `city`, `education_level`, `diploma_obtained` et `message` (facultatifs), `consent` (accepté), `submission_token` (UUID facultatif), `website` (champ piège, doit rester vide). Réponse `201` : `data.reference` (`EPHT-AAAA-NNNNNN`) ; `200` avec la même référence si le jeton a déjà servi. |
+| POST | `/contact` | Message du formulaire de contact (même limite `forms`). Champs : `name`, `email`, `phone` (facultatif), `subject`, `message` (10 à 5000 caractères), `consent` (accepté), `website` (champ piège). Réponse `201`. |
 
 ### Champs à noter
 
@@ -75,7 +77,7 @@ Protégée par une session Sanctum (cookie HTTP-only + CSRF), réservée aux dom
 
 | Phase | Points d'entrée |
 | --- | --- |
-| Formulaires | `POST /applications`, `POST /contact` |
+| Formulaires | Dépôt de documents pour `POST /applications` ; notifications par e-mail des candidatures et des messages |
 | Authentification | `GET /sanctum/csrf-cookie`, `POST /login`, `POST /logout`, réinitialisation du mot de passe |
 | Administration | `GET /admin/dashboard` ; candidatures (`GET`, `PATCH`, export CSV) ; formations, articles, galeries, événements, offres (`GET`, `POST`, `PATCH`, `DELETE`) ; `GET /admin/messages` ; médiathèque ; `GET`/`PATCH /admin/settings` |
 

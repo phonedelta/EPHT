@@ -45,12 +45,15 @@ const nextConfig: NextConfig = {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
   async redirects() {
-    // Adresses de l'ancien site epht.ma.
+    // Adresses de l'ancien site epht.ma et anciennes adresses de fiches.
     return [
       { source: "/index.html", destination: "/", permanent: true },
       { source: "/page12.html", destination: "/formations", permanent: true },
       { source: "/page8.html", destination: "/admissions", permanent: true },
       { source: "/page4.html", destination: "/", permanent: true },
+      // Fiches renommées selon les intitulés officiels (annexe 1 de la convention).
+      { source: "/formations/cuisine", destination: "/formations/technicien-en-cuisine", permanent: true },
+      { source: "/formations/patisserie", destination: "/formations/technicien-en-patisserie", permanent: true },
     ];
   },
 };

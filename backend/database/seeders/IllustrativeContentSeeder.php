@@ -82,8 +82,11 @@ class IllustrativeContentSeeder extends Seeder
         $covers = [
             'technicien-en-restauration' => 'table-dressee-fleurs',
             'agent-de-restauration' => 'service-plateau-flutes',
-            'cuisine' => 'decoupe-legumes',
-            'patisserie' => 'dessert-a-l-assiette',
+            'technicien-en-cuisine' => 'decoupe-legumes',
+            'technicien-en-patisserie' => 'dessert-a-l-assiette',
+            'technicien-en-reception' => 'salle-de-reception',
+            'technicien-specialise-en-gestion-hoteliere' => 'mise-en-place-de-table',
+            'technicien-specialise-en-direction-de-restauration' => 'table-de-restaurant',
         ];
 
         foreach ($covers as $slug => $name) {

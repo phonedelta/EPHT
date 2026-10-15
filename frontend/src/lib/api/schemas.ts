@@ -148,7 +148,7 @@ const home = z
         image: optionalMedia,
       })
       .prefault({}),
-    formations: section,
+    formations: z.object({ title: text, intro: text, sector: text }).prefault({}),
     practice: z
       .object({
         title: text,
@@ -189,6 +189,11 @@ export const formationSchema = z.object({
   level: z.string().nullable(),
   diploma: z.string().nullable(),
   duration: z.object({ label: z.string().nullable(), months: z.number().nullable() }).nullable(),
+  // Places par groupe et nombre de groupes ; nul tant que l'école ne les a pas communiqués.
+  capacity: z
+    .object({ groups: z.number().nullable(), per_group: z.number(), total: z.number().nullable() })
+    .nullish()
+    .transform((value) => value ?? null),
   category: category.nullish().transform((value) => value ?? null),
   cover: optionalMedia,
   published_at: z.string().nullable(),

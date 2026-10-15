@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { FinalCta } from "@/components/home/FinalCta";
+import { Formations } from "@/components/home/Formations";
 import { Practice } from "@/components/home/Practice";
 import { WhyChoose } from "@/components/home/WhyChoose";
 import { AnimatedText } from "@/components/motion/AnimatedText";
@@ -12,7 +13,7 @@ import { UnavailablePage } from "@/components/system/StatusPage";
 import { ArrowLink, ButtonLink } from "@/components/ui/Button";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getDictionary } from "@/i18n";
-import { dataOr, getGalleries, getSiteSettings } from "@/lib/api/queries";
+import { dataOr, getFormations, getGalleries, getSiteSettings } from "@/lib/api/queries";
 import { ordinal } from "@/lib/format";
 import { routes } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
@@ -30,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** L'école : son projet, sa pédagogie, ses engagements et ses espaces. */
 export default async function SchoolPage() {
-  const [settingsResult, spacesResult] = await Promise.all([getSiteSettings(), getGalleries("infrastructure")]);
+  const [settingsResult, spacesResult, formationsResult] = await Promise.all([getSiteSettings(), getGalleries("infrastructure"), getFormations()]);
 
   if (!settingsResult.ok) {
     return <UnavailablePage />;
@@ -106,6 +107,7 @@ export default async function SchoolPage() {
 
       <Practice content={home.practice} />
       <WhyChoose content={home.why} />
+      <Formations content={home.formations} formations={dataOr(formationsResult, [])} />
 
       {spaces.length > 0 ? (
         <section aria-labelledby="spaces-title" className="section-y bg-background">

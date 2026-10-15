@@ -1,7 +1,8 @@
-import { Clock, Mail, MapPin, MessageCircle, Phone, Share2, type LucideIcon } from "lucide-react";
+import { Clock, Mail, MapPin, MessageCircle, Navigation, Phone, Share2, type LucideIcon } from "lucide-react";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { ContactSection } from "@/components/contact/ContactSection";
 import { FinalCta } from "@/components/home/FinalCta";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
@@ -79,16 +80,18 @@ export default async function ContactPage() {
             </span>
           ))}
         </address>
-        {contact.map_url ? (
-          <a
-            href={contact.map_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-block text-sm font-medium text-cyan-700 hover:text-ink"
-          >
-            {t.pages.contact.map}
-          </a>
-        ) : null}
+        <a
+          href={
+            contact.map_url ??
+            `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contact.address_lines.join(", "))}`
+          }
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-cyan-700 hover:text-ink"
+        >
+          <Navigation aria-hidden="true" strokeWidth={1.75} className="size-3.5" />
+          {contact.map_url ? t.pages.contact.map : t.pages.contact.directions}
+        </a>
       </ContactCard>
     ) : null,
     numbers.length > 0 ? (
@@ -210,6 +213,8 @@ export default async function ContactPage() {
           </div>
         </section>
       ) : null}
+
+      <ContactSection />
 
       <FinalCta content={home.cta} showContact={false} />
     </PageTransition>

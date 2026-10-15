@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 
 import { FinalCta } from "@/components/home/FinalCta";
+import { Formations } from "@/components/home/Formations";
+import { Practice } from "@/components/home/Practice";
 import { SpacesShowcase } from "@/components/infrastructures/SpacesShowcase";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { PageHero } from "@/components/system/PageHero";
 import { UnavailablePage } from "@/components/system/StatusPage";
 import { getDictionary } from "@/i18n";
-import { dataOr, getGalleries, getSiteSettings } from "@/lib/api/queries";
+import { dataOr, getFormations, getGalleries, getSiteSettings } from "@/lib/api/queries";
 import type { Gallery } from "@/lib/api/schemas";
 import { routes } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
@@ -26,7 +28,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** Les espaces de l'école, présentés l'un après l'autre. */
 export default async function InfrastructuresPage() {
-  const [settingsResult, spacesResult] = await Promise.all([getSiteSettings(), getGalleries("infrastructure")]);
+  const [settingsResult, spacesResult, formationsResult] = await Promise.all([
+    getSiteSettings(),
+    getGalleries("infrastructure"),
+    getFormations(),
+  ]);
 
   if (!settingsResult.ok) {
     return <UnavailablePage />;
@@ -73,6 +79,8 @@ export default async function InfrastructuresPage() {
         </div>
       ) : null}
 
+      <Practice content={home.practice} />
+      <Formations content={home.formations} formations={dataOr(formationsResult, [])} />
       <FinalCta content={home.cta} />
     </PageTransition>
   );

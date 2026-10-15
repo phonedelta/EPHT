@@ -105,13 +105,15 @@ Le site collectera des données personnelles (candidatures, messages de contact)
 
 ## Anciennes adresses
 
-Les adresses du site historique sont redirigées de façon permanente (`frontend/next.config.ts`) :
+Les adresses du site historique, et celles des fiches renommées selon les intitulés officiels, sont redirigées de façon permanente (`frontend/next.config.ts`) :
 
 | Ancienne adresse | Nouvelle |
 | --- | --- |
 | `/index.html`, `/page4.html` | `/` |
 | `/page12.html` | `/formations` |
 | `/page8.html` | `/admissions` |
+| `/formations/cuisine` | `/formations/technicien-en-cuisine` |
+| `/formations/patisserie` | `/formations/technicien-en-patisserie` |
 
 ## Railway
 

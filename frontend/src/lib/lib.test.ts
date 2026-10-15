@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { CACHE_TAGS, isCacheTag } from "./api/tags";
 import { cn } from "./cn";
+import { formation } from "@/test/fixtures";
+
 import { dateBadge, formatDate, formatTime, ordinal, paragraphsOf, phoneHref } from "./format";
+import { diplomaCode, groupByLevel, offerFigures } from "./formations";
 import { isActivePath, routes } from "./routes";
 
 describe("formatDate", () => {
@@ -85,5 +88,40 @@ describe("dateBadge et formatTime", () => {
   it("ignorent une date invalide", () => {
     expect(dateBadge("pas une date")).toBeNull();
     expect(formatTime(null)).toBe("");
+  });
+});
+
+describe("offre de formation", () => {
+  const dt = formation({
+    id: 2,
+    level: "Technicien",
+    diploma: "Diplôme de technicien (DT)",
+    capacity: { groups: 1, per_group: 20, total: 20 },
+  });
+  const dts = formation({
+    id: 3,
+    level: "Technicien spécialisé",
+    diploma: "Diplôme de technicien spécialisé (DTS)",
+    capacity: { groups: 2, per_group: 20, total: 40 },
+  });
+
+  it("lit le sigle du diplôme dans son intitulé", () => {
+    expect(diplomaCode(dt)).toBe("DT");
+    expect(diplomaCode(dts)).toBe("DTS");
+    expect(diplomaCode(formation())).toBeNull();
+  });
+
+  it("regroupe les formations par niveau et additionne les places", () => {
+    const levels = groupByLevel([dt, dts, { ...dt, id: 4 }]);
+
+    expect(levels.map((level) => [level.code, level.formations.length, level.places])).toEqual([
+      ["DT", 2, 40],
+      ["DTS", 1, 40],
+    ]);
+  });
+
+  it("ne donne de total que si toutes les capacités sont connues", () => {
+    expect(offerFigures([dt, dts])).toEqual({ programmes: 2, levels: 2, groups: 3, places: 60, perGroup: 20 });
+    expect(offerFigures([dt, formation()])).toMatchObject({ programmes: 2, groups: 0, places: 0 });
   });
 });

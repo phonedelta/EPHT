@@ -32,6 +32,7 @@ export function formation(overrides: Partial<Formation> = {}): Formation {
     level: null,
     diploma: null,
     duration: null,
+    capacity: null,
     category: { id: 1, slug: "cuisine", name: "Cuisine" },
     cover: media(),
     published_at: "2026-10-01T09:00:00+00:00",

@@ -3,14 +3,17 @@ import type { Metadata } from "next";
 import { EventList } from "@/components/events/EventList";
 import { PhotoGallery } from "@/components/gallery/PhotoGallery";
 import { FinalCta } from "@/components/home/FinalCta";
+import { News } from "@/components/home/News";
+import { Practice } from "@/components/home/Practice";
 import { pickGalleryItems } from "@/components/home/StudentLife";
 import { Testimonials } from "@/components/home/Testimonials";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { PageHero } from "@/components/system/PageHero";
 import { UnavailablePage } from "@/components/system/StatusPage";
+import { YearMoments } from "@/components/student-life/YearMoments";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getDictionary } from "@/i18n";
-import { dataOr, getEvents, getGalleries, getSiteSettings, getTestimonials } from "@/lib/api/queries";
+import { dataOr, getEvents, getGalleries, getLatestArticles, getSiteSettings, getTestimonials } from "@/lib/api/queries";
 import { routes } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
 
@@ -30,12 +33,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** La vie à l'école : galerie, événements et témoignages. */
 export default async function StudentLifePage() {
-  const [settingsResult, galleriesResult, upcomingResult, pastResult, testimonialsResult] = await Promise.all([
+  const [settingsResult, galleriesResult, upcomingResult, pastResult, testimonialsResult, articlesResult] = await Promise.all([
     getSiteSettings(),
     getGalleries("student_life"),
     getEvents("upcoming"),
     getEvents("past"),
     getTestimonials(),
+    getLatestArticles(3),
   ]);
 
   if (!settingsResult.ok) {
@@ -60,8 +64,10 @@ export default async function StudentLifePage() {
         secondaryImage={items[1]?.media ?? null}
       />
 
+      <YearMoments galleries={dataOr(galleriesResult, [])} />
+
       {items.length > 0 ? (
-        <section aria-labelledby="gallery-title" className="section-y bg-surface">
+        <section aria-labelledby="gallery-title" className="section-y bg-background">
           <div className="container-page">
             <SectionHeader
               id="gallery-title"
@@ -75,7 +81,7 @@ export default async function StudentLifePage() {
       ) : null}
 
       {upcoming.length > 0 ? (
-        <section aria-labelledby="upcoming-title" className="section-y bg-background">
+        <section aria-labelledby="upcoming-title" className="section-y bg-surface">
           <div className="container-page">
             <SectionHeader
               id="upcoming-title"
@@ -89,7 +95,7 @@ export default async function StudentLifePage() {
       ) : null}
 
       {past.length > 0 ? (
-        <section aria-labelledby="past-title" className="section-y bg-surface">
+        <section aria-labelledby="past-title" className="section-y bg-background">
           <div className="container-page">
             <SectionHeader
               id="past-title"
@@ -102,7 +108,9 @@ export default async function StudentLifePage() {
         </section>
       ) : null}
 
+      <Practice content={home.practice} />
       <Testimonials content={home.testimonials} testimonials={dataOr(testimonialsResult, [])} />
+      <News content={home.news} articles={dataOr(articlesResult, [])} />
       <FinalCta content={home.cta} />
     </PageTransition>
   );

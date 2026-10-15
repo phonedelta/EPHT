@@ -13,19 +13,27 @@ Le site n'affiche aucune information officielle qui n'ait été vérifiée. Tout
 
 ## Formations
 
-Les quatre formations historiquement identifiées sont publiées avec leur seul intitulé et une présentation courte.
+Source : **annexe 1 de la convention THINK GROUPE – EPHT** (filières, niveaux, capacités d'accueil et calendrier). Elle confirme la filière « Hôtellerie, cuisine et restauration », sept programmes, leur niveau de diplôme et leur capacité d'accueil : un groupe de 20 places chacun, soit 7 groupes et 140 places. Le site affiche ces informations sur l'accueil, le catalogue, les fiches formation et la page Admissions.
 
-| Formation | Niveau | Diplôme | Durée | Programme, conditions d'accès, débouchés |
+| Formation | Diplôme | Groupes × places | Durée, dates de début et de fin | Niveau d'accès, profils de candidats |
 | --- | --- | --- | --- | --- |
-| Technicien en restauration | à confirmer | à confirmer — le site historique mentionne un « D.T » (diplôme de technicien) | à confirmer | à fournir |
-| Agent de restauration | à confirmer | à confirmer — le site historique mentionne un « D.Q » (diplôme de qualification) | à confirmer | à fournir |
-| Cuisine | à confirmer | à confirmer | à confirmer | à fournir |
-| Pâtisserie | à confirmer | à confirmer | à confirmer | à fournir |
+| Agent de restauration | Qualification professionnelle (DQ) | 1 × 20 | à fournir | à fournir |
+| Technicien en restauration | Technicien (DT) | 1 × 20 | à fournir | à fournir |
+| Technicien en cuisine | Technicien (DT) | 1 × 20 | à fournir | à fournir |
+| Technicien en pâtisserie | Technicien (DT) | 1 × 20 | à fournir | à fournir |
+| Technicien en réception | Technicien (DT) | 1 × 20 | à fournir | à fournir |
+| Technicien spécialisé en gestion hôtelière | Technicien spécialisé (DTS) | 1 × 20 | à fournir | à fournir |
+| Technicien spécialisé en direction de restauration | Technicien spécialisé (DTS) | 1 × 20 | à fournir | à fournir |
 
-Tant que ces champs sont vides, le site ne les affiche pas. Deux points à trancher également :
+L'annexe laisse vides le niveau d'accès, les profils de candidats et le calendrier de chaque programme : le site ne les affiche pas. Les capacités sont présentées « à titre indicatif », comme dans l'annexe.
 
-- le formulaire du site historique propose aussi les filières **« Service restauration »** et **« Réception »** : sont-elles toujours proposées ?
-- les **documents à joindre** à une candidature, formation par formation.
+Restent aussi à fournir :
+
+- les présentations courtes des trois nouveaux programmes (réception, gestion hôtelière, direction de restauration), rédigées provisoirement ;
+- le programme, les débouchés et les **documents à joindre** à une candidature, formation par formation ;
+- le classement en familles de métiers (Restauration, Cuisine, Pâtisserie, Hôtellerie), proposé pour les filtres du catalogue.
+
+Les éléments propres à la convention elle-même (parties, signataires, modalités du partenariat) ne sont pas publiés sur le site.
 
 ## Coordonnées
 
@@ -41,7 +49,7 @@ Reprises du site historique et affichées telles quelles :
 - **numéro WhatsApp officiel** (le bouton WhatsApp n'apparaîtra qu'une fois ce numéro renseigné) ;
 - **position exacte de l'école** pour la carte (coordonnées GPS ou lien) ;
 - horaires d'ouverture ;
-- réseaux sociaux : seule la page Facebook `facebook.com/epht.ecolehoteliere`, liée depuis le site historique, est affichée. Autres comptes officiels éventuels.
+- réseaux sociaux : comptes officiels communiqués par l'école et affichés — Facebook `facebook.com/ephtma`, Instagram `instagram.com/ephtma`, TikTok `tiktok.com/@ephtma`, LinkedIn `linkedin.com/company/ephtma`. Chaîne YouTube éventuelle à fournir.
 
 ## Infrastructures
 
@@ -52,7 +60,7 @@ Les cinq espaces cités au cahier des charges sont présentés : cuisine pédago
 Rédigés pour cette étape à partir des indications du cahier des charges, sans affirmation chiffrée ni fait daté. Ils sont à relire et à valider :
 
 - textes de la page d'accueil (présentation, formation pratique, engagements, admissions, vie étudiante) — fichier `backend/database/seeders/data/site_settings.php` ;
-- présentations courtes des quatre formations ;
+- présentations courtes des sept formations ;
 - descriptions des cinq espaces ;
 - description de l'école utilisée dans le pied de page et les moteurs de recherche.
 

@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 
+import { Audiences } from "@/components/careers/Audiences";
 import { JobOfferList } from "@/components/careers/JobOfferList";
 import { PartnerGrid } from "@/components/careers/PartnerGrid";
 import { FinalCta } from "@/components/home/FinalCta";
+import { FormationGrid } from "@/components/home/FormationGrid";
 import { Practice } from "@/components/home/Practice";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { PageHero } from "@/components/system/PageHero";
 import { UnavailablePage } from "@/components/system/StatusPage";
+import { ButtonLink } from "@/components/ui/Button";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getDictionary } from "@/i18n";
-import { dataOr, getJobOffers, getPartners, getSiteSettings } from "@/lib/api/queries";
+import { dataOr, getFormations, getJobOffers, getPartners, getSiteSettings } from "@/lib/api/queries";
 import { routes } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
 
@@ -26,10 +29,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** Offres de stage et d'emploi, partenaires de l'école. */
 export default async function CareersPage() {
-  const [settingsResult, offersResult, partnersResult] = await Promise.all([
+  const [settingsResult, offersResult, partnersResult, formationsResult] = await Promise.all([
     getSiteSettings(),
     getJobOffers(),
     getPartners(),
+    getFormations(),
   ]);
 
   if (!settingsResult.ok) {
@@ -39,6 +43,7 @@ export default async function CareersPage() {
   const t = getDictionary();
   const { home } = settingsResult.data;
   const partners = dataOr(partnersResult, []);
+  const formations = dataOr(formationsResult, []);
 
   return (
     <PageTransition>
@@ -49,15 +54,42 @@ export default async function CareersPage() {
         lead={t.pages.careers.lead}
         path={routes.careers}
         image={home.hero.image}
+        secondaryImage={home.about.image}
+        actions={
+          <>
+            <ButtonLink href="#offres" size="lg">
+              {t.pages.careers.viewOffers}
+            </ButtonLink>
+            <ButtonLink href={routes.contact} variant="outline" size="lg" arrow={false}>
+              {t.home.cta.secondary}
+            </ButtonLink>
+          </>
+        }
       />
 
-      <section aria-labelledby="offers-title" className="section-y bg-surface">
+      {formations.length > 0 ? (
+        <section aria-labelledby="paths-title" className="section-y bg-surface">
+          <div className="container-page">
+            <SectionHeader
+              id="paths-title"
+              eyebrow={t.pages.careers.pathsEyebrow}
+              title={t.pages.careers.pathsTitle}
+              intro={t.pages.careers.pathsIntro}
+              className="max-w-[40rem]"
+            />
+            <FormationGrid formations={formations} className="mt-10 lg:mt-12" />
+          </div>
+        </section>
+      ) : null}
+
+      <section id="offres" aria-labelledby="offers-title" className="section-y bg-background">
         <div className="container-page">
           <SectionHeader id="offers-title" eyebrow={t.pages.careers.offersEyebrow} title={t.pages.careers.offersTitle} className="mb-10" />
           <JobOfferList offers={dataOr(offersResult, [])} />
         </div>
       </section>
 
+      <Audiences email={settingsResult.data.contact.email} />
       <Practice content={home.practice} />
 
       {partners.length > 0 ? (

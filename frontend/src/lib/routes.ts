@@ -1,5 +1,8 @@
 import type { Dictionary } from "@/i18n/dictionaries/fr";
 
+/** Ancre du formulaire d'inscription sur la page Admissions. */
+export const APPLY_ANCHOR = "inscription";
+
 /** Adresses des pages du site public. */
 export const routes = {
   home: "/",
@@ -7,6 +10,9 @@ export const routes = {
   formations: "/formations",
   formation: (slug: string) => `/formations/${slug}`,
   admissions: "/admissions",
+  /** Formulaire d'inscription, sur la page Admissions ; la formation peut être présélectionnée. */
+  apply: (formation?: string) =>
+    `/admissions${formation ? `?formation=${encodeURIComponent(formation)}` : ""}#${APPLY_ANCHOR}`,
   infrastructures: "/infrastructures",
   studentLife: "/vie-a-l-epht",
   careers: "/stages-carrieres",

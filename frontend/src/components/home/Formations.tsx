@@ -1,3 +1,4 @@
+import { OfferFigures } from "@/components/formations/OfferFigures";
 import { Reveal } from "@/components/motion/Reveal";
 import { ArrowLink } from "@/components/ui/Button";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -37,6 +38,8 @@ export function Formations({ content, formations }: FormationsProps) {
             </Reveal>
           ) : null}
         </div>
+
+        <OfferFigures formations={formations} tinted className="mt-10" />
 
         {formations.length > 0 ? (
           <FormationGrid formations={formations} className="mt-10 lg:mt-12" />

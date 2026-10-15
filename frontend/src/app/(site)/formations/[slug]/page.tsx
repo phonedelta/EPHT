@@ -1,4 +1,4 @@
-import { CalendarClock, GraduationCap, Layers, ScrollText } from "lucide-react";
+import { Building2, CalendarClock, GraduationCap, Layers, ScrollText, Users } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -79,10 +79,20 @@ export default async function FormationPage({ params }: PageProps<"/formations/[
 
   // Repères de la formation : seuls ceux que l'école a confirmés sont affichés.
   const facts = [
+    settings.home.formations.sector
+      ? { icon: Building2, label: t.pages.formation.facts.sector, value: settings.home.formations.sector }
+      : null,
     formation.category ? { icon: Layers, label: t.pages.formation.facts.family, value: formation.category.name } : null,
     formation.level ? { icon: GraduationCap, label: t.pages.formation.facts.level, value: formation.level } : null,
     formation.diploma ? { icon: ScrollText, label: t.pages.formation.facts.diploma, value: formation.diploma } : null,
     duration ? { icon: CalendarClock, label: t.pages.formation.facts.duration, value: duration } : null,
+    formation.capacity
+      ? {
+          icon: Users,
+          label: t.pages.formation.facts.capacity,
+          value: t.pages.formation.capacityValue(formation.capacity.per_group, formation.capacity.groups),
+        }
+      : null,
   ].filter((fact) => fact !== null);
 
   return (
@@ -97,7 +107,7 @@ export default async function FormationPage({ params }: PageProps<"/formations/[
         secondaryImage={gallery.find((item) => item.media.id !== formation.cover?.id)?.media ?? null}
         actions={
           <>
-            <ButtonLink href={routes.admissions} size="lg">
+            <ButtonLink href={routes.apply(formation.slug)} size="lg">
               {t.nav.apply}
             </ButtonLink>
             <ButtonLink href={routes.formations} variant="outline" size="lg" arrow={false}>

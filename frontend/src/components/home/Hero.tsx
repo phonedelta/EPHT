@@ -103,7 +103,7 @@ export function Hero({ title, description, images, secondaryImage }: HeroProps) 
             <ButtonLink href={routes.formations} size="lg" className="whitespace-nowrap">
               {t.primaryCta}
             </ButtonLink>
-            <ButtonLink href={routes.admissions} variant="outline" size="lg" arrow={false} className="whitespace-nowrap">
+            <ButtonLink href={routes.apply()} variant="outline" size="lg" arrow={false} className="whitespace-nowrap">
               {t.secondaryCta}
             </ButtonLink>
           </motion.div>
